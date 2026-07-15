@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, \Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
     /**
      * Get the attributes that should be cast.
