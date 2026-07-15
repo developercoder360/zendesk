@@ -1,48 +1,75 @@
 <?php
 
+use Illuminate\Auth\Middleware\{Authenticate,Authorize};
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Foundation\Configuration\{Exceptions,Middleware};
 use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Route;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Stancl\Tenancy\Middleware\{
+    InitializeTenancyByDomain,
+    InitializeTenancyByDomainOrSubdomain,
+    InitializeTenancyByPath,
+    InitializeTenancyByRequestData,
+    InitializeTenancyBySubdomain,
+    PreventAccessFromCentralDomains,
+};
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        commands: __DIR__.'/../routes/console.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
-        using: function () {
-            // Central Routes
+        using: function (): void {
             foreach (config('tenancy.central_domains', []) as $domain) {
-                \Illuminate\Support\Facades\Route::middleware('web')
+                Route::middleware('web')
                     ->domain($domain)
                     ->group(base_path('routes/web.php'));
             }
 
-            // Tenant Routes
             if (file_exists(base_path('routes/tenant.php'))) {
-                \Illuminate\Support\Facades\Route::middleware([
+                Route::middleware([
                     'web',
                     \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
                     \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
                 ])->group(base_path('routes/tenant.php'));
             }
-        }
+        },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->redirectGuestsTo(function (Request $request) {
+            $centralDomain = config('tenancy.central_domains')[0] ?? 'zendesk.test';
+            $scheme = $request->getScheme();
+            
+            if (!in_array($request->getHost(), config('tenancy.central_domains'))) {
+                session()->put('url.intended', $request->fullUrl());
+            }
+            
+            return $scheme . '://' . $centralDomain . '/login';
+        });
+
+        // Tenancy-identification middleware MUST run before session/auth,
+        // otherwise the wrong database/session scope gets bootstrapped.
         $middleware->priority([
-            \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
-            \Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain::class,
-            \Stancl\Tenancy\Middleware\InitializeTenancyByDomainOrSubdomain::class,
-            \Stancl\Tenancy\Middleware\InitializeTenancyByPath::class,
-            \Stancl\Tenancy\Middleware\InitializeTenancyByRequestData::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Auth\Middleware\Authenticate::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Illuminate\Auth\Middleware\Authorize::class,
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            InitializeTenancyByDomain::class,
+            InitializeTenancyBySubdomain::class,
+            InitializeTenancyByDomainOrSubdomain::class,
+            InitializeTenancyByPath::class,
+            InitializeTenancyByRequestData::class,
+            StartSession::class,
+            ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\PreventRequestForgery::class,
+            Authenticate::class,
+            SubstituteBindings::class,
+            Authorize::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
+            fn(Request $request): bool => $request->is('api/*') || $request->expectsJson(),
         );
-    })->create();
+    })
+    ->create();

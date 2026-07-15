@@ -10,11 +10,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "anousss007/blatui": "^1.16",
+        "gehrisandro/tailwind-merge-laravel": "^1.4",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
         "livewire/blaze": "^1.0",
-        "livewire/livewire": "^3.6.4",
+        "livewire/livewire": "^4.3",
         "livewire/volt": "^1.7.0",
+        "mallardduck/blade-lucide-icons": "^1.26",
+        "spatie/laravel-activitylog": "^5.0",
+        "spatie/laravel-permission": "^8.3",
         "stancl/tenancy": "^3.10"
     },
     "require-dev": {
@@ -28,6 +33,8 @@
         "laravel/sail": "^1.53",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.9.3",
+        "pestphp/pest": "^4.7",
+        "pestphp/pest-plugin-laravel": "^4.1",
         "phpunit/phpunit": "^12.5.23"
     },
     "autoload": {

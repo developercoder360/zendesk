@@ -15,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            \App\Contracts\PaymentGatewayContract::class,
+            \App\Services\MockPaymentGateway::class
+        );
     }
 
     /**

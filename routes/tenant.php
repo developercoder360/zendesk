@@ -20,6 +20,22 @@ Route::get('/', function () {
     return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
 });
 
+Route::get('/tenant-login', function (\Illuminate\Http\Request $request) {
+    $token = $request->get('token');
+    $data = cache()->pull('tenant_login_' . $token);
+    
+    if (! $data) {
+        abort(401, 'Invalid or expired login token.');
+    }
+    
+    $user = \App\Models\User::find($data['user_id']);
+    if ($user) {
+        \Illuminate\Support\Facades\Auth::login($user);
+    }
+    
+    return redirect($data['redirect'] ?? '/dashboard');
+})->name('tenant.login');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -28,4 +44,4 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-require __DIR__.'/auth.php';
+
