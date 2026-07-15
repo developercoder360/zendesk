@@ -1,0 +1,2 @@
+<div data-slot="alert-dialog-header" <?php echo e($attributes->twMerge('flex flex-col gap-2 text-center sm:text-left')); ?>><?php echo e($slot); ?></div>
+<?php /**PATH C:\laragon\www\zendesk\resources\views/components/ui/alert-dialog-header.blade.php ENDPATH**/ ?>

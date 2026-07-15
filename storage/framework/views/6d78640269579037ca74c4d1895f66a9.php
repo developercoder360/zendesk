@@ -1,0 +1,2 @@
+<div data-slot="card-footer" <?php echo e($attributes->twMerge('flex items-center px-6 [.border-t]:pt-6')); ?>><?php echo e($slot); ?></div>
+<?php /**PATH C:\laragon\www\zendesk\resources\views/components/ui/card-footer.blade.php ENDPATH**/ ?>

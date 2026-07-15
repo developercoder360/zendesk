@@ -1,0 +1,2 @@
+<div data-slot="card-content" <?php echo e($attributes->twMerge('px-6')); ?>><?php echo e($slot); ?></div>
+<?php /**PATH C:\laragon\www\zendesk\resources\views/components/ui/card-content.blade.php ENDPATH**/ ?>

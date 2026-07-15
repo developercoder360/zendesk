@@ -1,0 +1,3 @@
+<svg class="text-muted-foreground pointer-events-none size-4 shrink-0 transition-transform duration-200 translate-y-0.5 [[data-state=open]&gt;&amp;]:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="m6 9 6 6 6-6"/>
+</svg>

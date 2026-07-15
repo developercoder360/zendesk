@@ -1,0 +1,2 @@
+<div data-slot="card-description" <?php echo e($attributes->twMerge('text-muted-foreground text-sm')); ?>><?php echo e($slot); ?></div>
+<?php /**PATH C:\laragon\www\zendesk\resources\views/components/ui/card-description.blade.php ENDPATH**/ ?>
