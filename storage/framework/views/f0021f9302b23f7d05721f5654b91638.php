@@ -1,2 +1,0 @@
-<div data-slot="card-title" <?php echo e($attributes->twMerge('leading-none font-semibold')); ?>><?php echo e($slot); ?></div>
-<?php /**PATH C:\laragon\www\zendesk\resources\views/components/ui/card-title.blade.php ENDPATH**/ ?>

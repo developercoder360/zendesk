@@ -1,2 +1,0 @@
-<div data-slot="alert-dialog-footer" <?php echo e($attributes->twMerge('flex flex-col-reverse gap-2 sm:flex-row sm:justify-end')); ?>><?php echo e($slot); ?></div>
-<?php /**PATH C:\laragon\www\zendesk\resources\views/components/ui/alert-dialog-footer.blade.php ENDPATH**/ ?>

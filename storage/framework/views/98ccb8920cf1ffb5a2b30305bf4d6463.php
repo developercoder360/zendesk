@@ -1,2 +1,0 @@
-<h2 data-slot="alert-dialog-title" <?php echo e($attributes->twMerge('text-lg font-semibold')); ?>><?php echo e($slot); ?></h2>
-<?php /**PATH C:\laragon\www\zendesk\resources\views/components/ui/alert-dialog-title.blade.php ENDPATH**/ ?>

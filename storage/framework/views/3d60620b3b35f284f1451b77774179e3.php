@@ -1,2 +1,0 @@
-<p data-slot="alert-dialog-description" <?php echo e($attributes->twMerge('text-muted-foreground text-sm')); ?>><?php echo e($slot); ?></p>
-<?php /**PATH C:\laragon\www\zendesk\resources\views/components/ui/alert-dialog-description.blade.php ENDPATH**/ ?>
