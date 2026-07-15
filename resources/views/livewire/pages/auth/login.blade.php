@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.auth')] class extends Component
+new #[Layout('layouts.central-auth')] class extends Component
 {
     public LoginForm $form;
 
@@ -24,7 +24,7 @@ new #[Layout('layouts.auth')] class extends Component
         $domainRecord = \App\Models\Domain::where('tenant_id', $user->tenant_id)->first();
         
         if (! $domainRecord) {
-            $this->redirect(route('dashboard', absolute: false), navigate: true);
+            $this->redirect(route('central.dashboard', absolute: false), navigate: true);
             return;
         }
 
@@ -48,53 +48,56 @@ new #[Layout('layouts.auth')] class extends Component
 }; ?>
 
 <div>
-    <x-ui.card class="w-full shadow-lg border-border/50">
-        <x-ui.card-header class="space-y-1 text-center">
-            <x-ui.card-title class="text-2xl font-bold tracking-tight">Welcome back</x-ui.card-title>
-            <x-ui.card-description>Enter your email and password to sign in</x-ui.card-description>
-        </x-ui.card-header>
-        <x-ui.card-content>
+    <x-ui.tabs value="signin" class="w-full">
+        <x-ui.tabs-list class="grid w-full grid-cols-2">
+            <x-ui.tabs-trigger value="signin">Sign in</x-ui.tabs-trigger>
+            <x-ui.tabs-trigger value="signup" wire:click="redirect('{{ route('register') }}', true)">Create account</x-ui.tabs-trigger>
+        </x-ui.tabs-list>
+
+        <x-ui.tabs-content value="signin" class="mt-6">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold tracking-tight">Welcome back</h1>
+                <p class="text-muted-foreground mt-1 text-sm">Sign in to your workspace to continue.</p>
+            </div>
+
             @if (session('status'))
                 <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
                     {{ session('status') }}
                 </div>
             @endif
 
-            <form wire:submit="login" class="space-y-4">
-                <div class="space-y-2">
+            <form wire:submit="login" class="grid gap-4">
+                <div class="grid gap-2">
                     <x-ui.label for="email">Email</x-ui.label>
-                    <x-ui.input wire:model="form.email" id="email" type="email" required autofocus autocomplete="username" />
+                    <x-ui.input wire:model="form.email" id="email" type="email" placeholder="you@example.com" required autofocus autocomplete="username">
+                        <x-slot:leading><x-lucide-mail /></x-slot:leading>
+                    </x-ui.input>
                     @error('form.email') <p class="text-sm text-destructive">{{ $message }}</p> @enderror
                 </div>
                 
-                <div class="space-y-2">
+                <div class="grid gap-2">
                     <div class="flex items-center justify-between">
                         <x-ui.label for="password">Password</x-ui.label>
                         @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" wire:navigate class="text-sm font-medium text-primary hover:underline">Forgot password?</a>
+                            <a href="{{ route('password.request') }}" wire:navigate class="text-primary text-sm hover:underline">Forgot password?</a>
                         @endif
                     </div>
-                    <x-ui.input wire:model="form.password" id="password" type="password" required autocomplete="current-password" />
+                    <x-ui.input wire:model="form.password" id="password" type="password" placeholder="••••••••" required autocomplete="current-password">
+                        <x-slot:leading><x-lucide-lock /></x-slot:leading>
+                    </x-ui.input>
                     @error('form.password') <p class="text-sm text-destructive">{{ $message }}</p> @enderror
                 </div>
                 
-                <div class="flex items-center space-x-2 pt-2">
+                <label class="flex items-center gap-2 text-sm">
                     <input wire:model="form.remember" id="remember" type="checkbox" class="h-4 w-4 rounded border-input bg-background text-primary focus:ring-primary focus:ring-offset-background">
-                    <x-ui.label for="remember" class="font-normal text-sm cursor-pointer">Remember me</x-ui.label>
-                </div>
+                    Remember me for 30 days
+                </label>
                 
-                <div class="pt-2">
-                    <x-ui.button type="submit" class="w-full">
-                        <span wire:loading.remove wire:target="login">Sign In</span>
-                        <span wire:loading wire:target="login">Signing in...</span>
-                    </x-ui.button>
-                </div>
+                <x-ui.button type="submit" class="w-full">
+                    <span wire:loading.remove wire:target="login">Sign in</span>
+                    <span wire:loading wire:target="login">Signing in...</span>
+                </x-ui.button>
             </form>
-        </x-ui.card-content>
-        <x-ui.card-footer class="flex items-center justify-center pb-6">
-            <div class="text-sm text-muted-foreground text-center">
-                Don't have an account? <a href="{{ route('register') }}" wire:navigate class="text-primary hover:underline font-medium">Start your free trial</a>
-            </div>
-        </x-ui.card-footer>
-    </x-ui.card>
+        </x-ui.tabs-content>
+    </x-ui.tabs>
 </div>

@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\RateLimiter;
 
-new #[Layout('layouts.auth')] class extends Component {
+new #[Layout('layouts.central-auth')] class extends Component {
     public string $step = 'plan'; // plan, form, payment
     public $plans = [];
 
@@ -137,21 +137,26 @@ new #[Layout('layouts.auth')] class extends Component {
 }; ?>
 
 <div>
-    <x-ui.card class="w-full sm:max-w-md shadow-lg border-border/50">
-        <x-ui.card-header class="space-y-1 text-center">
-            <x-ui.card-title class="text-2xl font-bold tracking-tight">Create your account</x-ui.card-title>
-            <x-ui.card-description>Start your 14-day free trial. No credit card required during trial.</x-ui.card-description>
+    <x-ui.tabs value="signup" class="w-full">
+        <x-ui.tabs-list class="grid w-full grid-cols-2">
+            <x-ui.tabs-trigger value="signin" wire:click="redirect('{{ route('login') }}', true)">Sign in</x-ui.tabs-trigger>
+            <x-ui.tabs-trigger value="signup">Create account</x-ui.tabs-trigger>
+        </x-ui.tabs-list>
+
+        <x-ui.tabs-content value="signup" class="mt-6">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold tracking-tight">Create your account</h1>
+                <p class="text-muted-foreground mt-1 text-sm">Start your 14-day free trial. No credit card required during trial.</p>
+            </div>
             
-            <div class="flex items-center justify-center space-x-2 mt-4 text-xs font-medium text-muted-foreground">
+            <div class="flex items-center space-x-2 mb-6 text-xs font-medium text-muted-foreground">
                 <span class="{{ $step === 'plan' ? 'text-primary' : '' }}">1. Plan</span>
                 <span>&mdash;</span>
                 <span class="{{ $step === 'form' ? 'text-primary' : '' }}">2. Details</span>
                 <span>&mdash;</span>
                 <span class="{{ $step === 'payment' ? 'text-primary' : '' }}">3. Payment</span>
             </div>
-        </x-ui.card-header>
 
-        <x-ui.card-content>
             @if ($step === 'plan')
                 <div class="space-y-4">
                     @foreach ($plans as $plan)
@@ -218,8 +223,8 @@ new #[Layout('layouts.auth')] class extends Component {
                     @endif
                     
                     <div class="bg-muted p-4 rounded-lg flex justify-between items-center">
-                        <span class="font-medium">{{ App\Models\Plan::find($planId)->name }} Plan</span>
-                        <span class="font-bold">${{ number_format(App\Models\Plan::find($planId)->price / 100, 2) }} <span class="text-sm font-normal text-muted-foreground">/mo</span></span>
+                        <span class="font-medium">{{ App\Models\Plan::find($planId)->name ?? '' }} Plan</span>
+                        <span class="font-bold">${{ number_format((App\Models\Plan::find($planId)->price ?? 0) / 100, 2) }} <span class="text-sm font-normal text-muted-foreground">/mo</span></span>
                     </div>
 
                     <div class="space-y-2">
@@ -239,11 +244,6 @@ new #[Layout('layouts.auth')] class extends Component {
                     </div>
                 </div>
             @endif
-        </x-ui.card-content>
-        <x-ui.card-footer class="flex items-center justify-center pb-6">
-            <div class="text-sm text-muted-foreground text-center">
-                Already have an account? <a href="{{ route('login') }}" wire:navigate class="text-primary hover:underline font-medium">Log in</a>
-            </div>
-        </x-ui.card-footer>
-    </x-ui.card>
+        </x-ui.tabs-content>
+    </x-ui.tabs>
 </div>

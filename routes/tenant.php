@@ -38,10 +38,10 @@ Route::get('/tenant-login', function (\Illuminate\Http\Request $request) {
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name('tenant.dashboard');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
-    ->name('profile');
+    ->name('tenant.profile');
 
 

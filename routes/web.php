@@ -16,12 +16,8 @@ Volt::route('/terms-of-service', 'pages.legal.terms')->name('terms');
 Volt::route('/cookie-policy', 'pages.legal.cookies')->name('cookies');
 
 // Central Admin Dashboard / Customer Portal Placeholder
-Route::get('/dashboard', function () {
-    return 'Central Dashboard / Customer Portal Placeholder';
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/billing', function () {
-    return 'Central Billing / Customer Portal Placeholder';
-})->middleware(['auth', 'verified'])->name('billing');
+Volt::route('/dashboard', 'central.dashboard')->middleware(['auth', 'verified'])->name('central.dashboard');
+Volt::route('/billing', 'central.billing')->middleware(['auth', 'verified'])->name('central.billing');
+Volt::route('/account', 'central.account')->middleware(['auth', 'verified'])->name('central.account');
 
 require __DIR__.'/auth.php';
