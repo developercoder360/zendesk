@@ -30,7 +30,7 @@ Route::get('/tenant-login', function (Request $request) {
     }
     $user = User::find($data['user_id']);
     if ($user) {
-        Auth::login($user);
+        Auth::login($user, $data['remember'] ?? false);
     }
     return redirect($data['redirect'] ?? '/dashboard');
 })->name('tenant.login');
@@ -49,3 +49,7 @@ Route::middleware(['auth'])->prefix('tickets')->name('tenant.tickets.')->group(f
 
 // Public Ticket View (Tokenized)
 Route::get('/t/{token}', \App\Livewire\Public\Ticket\ViewTicket::class)->name('tenant.tickets.public');
+
+// Embeddable Widget
+Route::get('/widget/frame', \App\Livewire\Public\Widget\TicketForm::class)->name('tenant.widget.frame')
+    ->withoutMiddleware([\Illuminate\Http\Middleware\FrameGuard::class]);

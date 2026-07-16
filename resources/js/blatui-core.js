@@ -16,15 +16,15 @@ const themeStore = {
     darkMode: 'class',
     // Every dimension shadcn exposes, each persisted independently.
     mode: localStorage.getItem('theme:mode') || 'light',
-    base: localStorage.getItem('theme:base') || 'neutral',
-    preset: localStorage.getItem('theme:preset') || 'default',
-    radius: localStorage.getItem('theme:radius') || '0.625',
-    font: localStorage.getItem('theme:font') || 'sans',
-    shadow: localStorage.getItem('theme:shadow') || 'default',
-    spacing: localStorage.getItem('theme:spacing') || 'default',
-    tracking: localStorage.getItem('theme:tracking') || 'normal',
-    inputStyle: localStorage.getItem('theme:inputStyle') || 'outline',
-    fontHeading: localStorage.getItem('theme:fontHeading') || 'sans',
+    base: localStorage.getItem('theme:base') || 'olive',
+    preset: localStorage.getItem('theme:preset') || 'emerald',
+    radius: localStorage.getItem('theme:radius') || '1',
+    font: localStorage.getItem('theme:font') || 'inter',
+    shadow: localStorage.getItem('theme:shadow') || 'xl',
+    spacing: localStorage.getItem('theme:spacing') || 'compact',
+    tracking: localStorage.getItem('theme:tracking') || 'tight',
+    inputStyle: localStorage.getItem('theme:inputStyle') || 'inset',
+    fontHeading: localStorage.getItem('theme:fontHeading') || 'inter',
 
     init() {
         // No stored choice → fall back per the darkMode policy: 'system' follows the OS,
@@ -38,7 +38,7 @@ const themeStore = {
         });
         // Keep every same-origin document in sync (e.g. block-preview iframes):
         // localStorage writes in one document fire a `storage` event in the others.
-        const defaults = { mode: this.darkMode === 'system' ? 'system' : 'light', base: 'neutral', preset: 'default', radius: '0.625', font: 'sans', shadow: 'default', spacing: 'default', tracking: 'normal', inputStyle: 'outline', fontHeading: 'sans' };
+        const defaults = { mode: this.darkMode === 'system' ? 'system' : 'light', base: 'olive', preset: 'emerald', radius: '1', font: 'inter', shadow: 'xl', spacing: 'compact', tracking: 'tight', inputStyle: 'inset', fontHeading: 'inter' };
         window.addEventListener('storage', (e) => {
             if (!e.key || !e.key.startsWith('theme:')) return;
             const key = e.key.slice('theme:'.length);
@@ -107,15 +107,15 @@ const themeStore = {
             localStorage.removeItem('theme:' + k),
         );
         this.mode = this.darkMode === 'system' ? 'system' : 'light';
-        this.base = 'neutral';
-        this.preset = 'default';
-        this.radius = '0.625';
-        this.font = 'sans';
-        this.shadow = 'default';
-        this.spacing = 'default';
-        this.tracking = 'normal';
-        this.inputStyle = 'outline';
-        this.fontHeading = 'sans';
+        this.base = 'olive';
+        this.preset = 'emerald';
+        this.radius = '1';
+        this.font = 'inter';
+        this.shadow = 'xl';
+        this.spacing = 'compact';
+        this.tracking = 'tight';
+        this.inputStyle = 'inset';
+        this.fontHeading = 'inter';
         this.apply();
     },
 

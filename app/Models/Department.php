@@ -1,20 +1,24 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Department extends Model
 {
-    use BelongsToTenant;
+    use HasFactory, BelongsToTenant;
 
-    protected $guarded = [];
-    public function tickets()
+    protected $fillable = ['tenant_id', 'name'];
+
+    public function tenantUsers()
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(TenantUser::class);
+    }
+
+    public function chats()
+    {
+        return $this->hasMany(Chat::class);
     }
 }
-

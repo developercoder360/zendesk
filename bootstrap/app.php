@@ -44,6 +44,10 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias([
+            'super.admin' => \App\Http\Middleware\IsSuperAdmin::class,
+        ]);
+        
         $middleware->redirectGuestsTo(function (Request $request) {
             $centralDomain = config('tenancy.central_domains')[0] ?? 'zendesk.test';
             $scheme = $request->getScheme();

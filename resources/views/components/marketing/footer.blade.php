@@ -61,7 +61,7 @@
         <div class="mt-12 pt-8 border-t flex flex-col md:flex-row items-center justify-between text-xs text-muted-foreground">
             <p>&copy; {{ date('Y') }} Zendesk Inc. All rights reserved.</p>
             <div class="mt-4 md:mt-0 flex space-x-4">
-                <button onclick="document.documentElement.classList.toggle('dark'); localStorage.setItem('theme:mode', document.documentElement.classList.contains('dark') ? 'dark' : 'light')" class="flex items-center space-x-1 hover:text-foreground transition-colors">
+                <button type="button" x-data @click="$store.theme && $store.theme.toggle()" class="flex items-center space-x-1 hover:text-foreground transition-colors">
                     <x-lucide-moon class="h-4 w-4 hidden dark:block" />
                     <x-lucide-sun class="h-4 w-4 block dark:hidden" />
                     <span>Toggle Theme</span>
