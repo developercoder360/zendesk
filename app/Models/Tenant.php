@@ -12,4 +12,9 @@ class Tenant extends BaseTenant
     protected $casts = [
         'data' => 'array',
     ];
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }
+

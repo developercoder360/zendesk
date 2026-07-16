@@ -9,6 +9,7 @@ use App\Events\TenantRegistered;
 use App\Models\Domain;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -38,6 +39,32 @@ class RegisterTenant
                 'password' => Hash::make($dto->password),
                 'tenant_id' => $tenant->id,
             ]);
+
+            // Set Spatie Team ID for this tenant temporarily to create roles
+            $previousTeamId = getPermissionsTeamId();
+            setPermissionsTeamId($tenant->id);
+
+            $ownerRole = Role::create(['name' => 'Owner', 'tenant_id' => $tenant->id]);
+            // Owner gets everything implicitly via Gate::before, but good practice to attach all current permissions
+            $ownerRole->givePermissionTo(\Spatie\Permission\Models\Permission::all());
+
+            $adminRole = Role::create(['name' => 'Company Admin', 'tenant_id' => $tenant->id]);
+            $adminRole->givePermissionTo([
+                'view_dashboard', 'view_company', 'edit_company', 'view_users', 'create_users', 'edit_users', 'invite_users', 'view_teams', 'create_teams', 'edit_teams', 'view_tickets', 'create_tickets', 'assign_tickets', 'edit_tickets', 'close_tickets', 'delete_tickets', 'view_customers', 'create_customers', 'edit_customers', 'delete_customers', 'view_articles', 'create_articles', 'edit_articles', 'publish_articles', 'view_billing', 'manage_subscription', 'download_invoices', 'upgrade_plan', 'view_settings', 'edit_settings', 'view_reports', 'export_reports', 'view_notifications', 'send_notifications', 'view_api_keys', 'create_api_keys', 'revoke_api_keys'
+            ]);
+
+            Role::create(['name' => 'Agent', 'tenant_id' => $tenant->id])->givePermissionTo([
+                'view_dashboard', 'view_tickets', 'create_tickets', 'edit_tickets', 'close_tickets', 'view_customers', 'view_articles'
+            ]);
+
+            Role::create(['name' => 'Viewer', 'tenant_id' => $tenant->id])->givePermissionTo([
+                'view_dashboard', 'view_tickets', 'view_customers', 'view_articles'
+            ]);
+
+            $owner->assignRole($ownerRole);
+
+            // Restore previous team id
+            setPermissionsTeamId($previousTeamId);
 
             TenantRegistered::dispatch($tenant, $owner);
 

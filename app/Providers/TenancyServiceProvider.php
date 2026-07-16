@@ -70,11 +70,17 @@ class TenancyServiceProvider extends ServiceProvider
             Events\InitializingTenancy::class => [],
             Events\TenancyInitialized::class => [
                 Listeners\BootstrapTenancy::class,
+                function (Events\TenancyInitialized $event) {
+                    setPermissionsTeamId($event->tenancy->tenant->id);
+                },
             ],
 
             Events\EndingTenancy::class => [],
             Events\TenancyEnded::class => [
                 Listeners\RevertToCentralContext::class,
+                function (Events\TenancyEnded $event) {
+                    setPermissionsTeamId(null);
+                },
             ],
 
             Events\BootstrappingTenancy::class => [],

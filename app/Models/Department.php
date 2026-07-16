@@ -12,4 +12,9 @@ class Department extends Model
     use BelongsToTenant;
 
     protected $guarded = [];
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }
+

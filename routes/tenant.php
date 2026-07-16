@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Livewire\Volt\Volt;
 /*
 |--------------------------------------------------------------------------
 | Tenant Routes
@@ -17,31 +20,32 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
+    return redirect('/dashboard');
 });
-
-Route::get('/tenant-login', function (\Illuminate\Http\Request $request) {
+Route::get('/tenant-login', function (Request $request) {
     $token = $request->get('token');
     $data = cache()->pull('tenant_login_' . $token);
-    
     if (! $data) {
         abort(401, 'Invalid or expired login token.');
     }
-    
-    $user = \App\Models\User::find($data['user_id']);
+    $user = User::find($data['user_id']);
     if ($user) {
-        \Illuminate\Support\Facades\Auth::login($user);
+        Auth::login($user);
     }
-    
     return redirect($data['redirect'] ?? '/dashboard');
 })->name('tenant.login');
+Volt::route('dashboard', 'tenant.dashboard')->middleware(['auth', 'verified'])->name('tenant.dashboard');
+Volt::route('profile', 'tenant.profile')->middleware(['auth'])->name('tenant.profile');
+Route::middleware(['auth', 'can:view_settings'])->prefix('settings/roles')->name('tenant.settings.roles.')->group(function () {
+    Volt::route('/', 'tenant.settings.roles-list')->name('index');
+    Volt::route('/create', 'tenant.settings.role-form')->name('create');
+    Volt::route('/{role}/edit', 'tenant.settings.role-form')->name('edit');
+});
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('tenant.dashboard');
+Route::middleware(['auth'])->prefix('tickets')->name('tenant.tickets.')->group(function () {
+    Route::get('/', \App\Livewire\Tenant\Tickets\TicketList::class)->name('index');
+    Route::get('/{ticket}', \App\Livewire\Tenant\Tickets\TicketDetail::class)->name('show');
+});
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('tenant.profile');
-
-
+// Public Ticket View (Tokenized)
+Route::get('/t/{token}', \App\Livewire\Public\Ticket\ViewTicket::class)->name('tenant.tickets.public');

@@ -75,15 +75,15 @@ new class extends Component
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-ui.label for="name">{{ __('Name') }}</x-ui.label>
+            <x-ui.input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
+            @error('name') <p class="mt-2 text-sm text-destructive">{{ $message }}</p> @enderror
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <x-ui.label for="email">{{ __('Email') }}</x-ui.label>
+            <x-ui.input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required autocomplete="username" />
+            @error('email') <p class="mt-2 text-sm text-destructive">{{ $message }}</p> @enderror
 
             @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
                 <div>
@@ -105,11 +105,11 @@ new class extends Component
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+            <x-ui.button>{{ __('Save') }}</x-ui.button>
 
-            <x-action-message class="me-3" on="profile-updated">
+            <div x-data="{ shown: false, timeout: null }" x-on:profile-updated.window="clearTimeout(timeout); shown = true; timeout = setTimeout(() => { shown = false }, 2000);" x-show="shown" x-transition:leave.opacity.duration.1500ms style="display: none;" class="text-sm text-muted-foreground me-3">
                 {{ __('Saved.') }}
-            </x-action-message>
+            {{ __('Saved.') }}</div>
         </div>
     </form>
 </section>

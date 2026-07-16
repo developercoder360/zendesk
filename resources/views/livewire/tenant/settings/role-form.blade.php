@@ -1,0 +1,120 @@
+<?php
+
+use App\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Livewire\Volt\Component;
+use Livewire\Attributes\Layout;
+
+new #[Layout('layouts.tenant')] class extends Component {
+    public ?Role $role = null;
+    public string $name = '';
+    public array $selectedPermissions = [];
+
+    public function mount(?Role $role = null)
+    {
+        if ($role && $role->exists) {
+            $this->role = $role;
+            $this->name = $role->name;
+            $this->selectedPermissions = $role->permissions->pluck('name')->toArray();
+        }
+    }
+
+    public function save()
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        if ($this->role && in_array($this->role->name, ['Owner', 'Company Admin'])) {
+            // Can't rename system roles
+            $this->name = $this->role->name;
+        }
+
+        if (!$this->role) {
+            $this->role = Role::create([
+                'name' => $this->name,
+                'tenant_id' => tenant('id')
+            ]);
+        } else {
+            $this->role->update(['name' => $this->name]);
+        }
+
+        $this->role->syncPermissions($this->selectedPermissions);
+
+        return $this->redirect(route('tenant.settings.roles.index'), navigate: true);
+    }
+
+    public function with(): array
+    {
+        // Group permissions dynamically or manually. Here we do it manually by prefix for a cleaner UI.
+        $allPermissions = Permission::all()->pluck('name')->toArray();
+        $grouped = [];
+        
+        foreach ($allPermissions as $perm) {
+            $parts = explode('_', $perm, 2);
+            $module = count($parts) > 1 ? ucfirst($parts[1]) : 'General';
+            $grouped[$module][] = $perm;
+        }
+
+        return [
+            'permissionGroups' => $grouped,
+        ];
+    }
+}; ?>
+
+<div class="max-w-4xl mx-auto space-y-6">
+    <nav class="flex items-center text-sm text-muted-foreground mb-4">
+        <span class="hover:text-foreground transition-colors cursor-pointer">Settings</span>
+        <x-lucide-chevron-right class="mx-2 size-4" />
+        <a wire:navigate href="{{ route('tenant.settings.roles.index') }}" class="hover:text-foreground transition-colors">Roles</a>
+        <x-lucide-chevron-right class="mx-2 size-4" />
+        <span class="font-medium text-foreground">{{ $role ? 'Edit Role' : 'Create Role' }}</span>
+    </nav>
+
+    <div class="mb-6 flex items-center gap-4">
+        <x-ui.button variant="outline" size="icon" wire:navigate href="{{ route('tenant.settings.roles.index') }}">
+            <x-lucide-arrow-left class="w-4 h-4" />
+        </x-ui.button>
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight">{{ $role ? 'Edit Role' : 'Create Role' }}</h1>
+            <p class="text-sm text-muted-foreground">Define what this role can and cannot do.</p>
+        </div>
+    </div>
+
+    <form wire:submit="save" class="space-y-8">
+        <div class="space-y-2">
+            <x-ui.label for="name">Role Name</x-ui.label>
+            <x-ui.input wire:model="name" id="name" required :disabled="$role && in_array($role->name, ['Owner', 'Company Admin'])" />
+            @error('name') <span class="text-sm text-destructive">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="space-y-4">
+            <h2 class="text-lg font-semibold border-b pb-2">Permissions</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach($permissionGroups as $module => $perms)
+                    <x-ui.card>
+                        <x-ui.card-header>
+                            <x-ui.card-title class="text-base">{{ $module }}</x-ui.card-title>
+                        </x-ui.card-header>
+                        <x-ui.card-content class="space-y-3">
+                            @foreach($perms as $perm)
+                                <label class="flex items-center gap-3 text-sm cursor-pointer hover:bg-muted/50 p-1 rounded-md transition-colors">
+                                    <input type="checkbox" wire:model="selectedPermissions" value="{{ $perm }}" class="w-4 h-4 rounded border-input text-primary focus:ring-primary" 
+                                        @if($role && $role->name === 'Owner') disabled checked @endif
+                                    >
+                                    <span class="capitalize">{{ str_replace('_', ' ', $perm) }}</span>
+                                </label>
+                            @endforeach
+                        </x-ui.card-content>
+                    </x-ui.card>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-4 border-t pt-6">
+            <x-ui.button type="button" variant="outline" wire:navigate href="{{ route('tenant.settings.roles.index') }}">Cancel</x-ui.button>
+            <x-ui.button type="submit">Save Role</x-ui.button>
+        </div>
+    </form>
+</div>

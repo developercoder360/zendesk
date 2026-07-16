@@ -13,6 +13,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireScriptConfig
 
     <!-- Dark Mode Script -->
     <script>
@@ -57,7 +58,7 @@
                         <x-lucide-sun class="size-4 dark:hidden" /><x-lucide-moon class="hidden size-4 dark:block" />
                     </button>
                     
-                    @livewire('central.layout.user-dropdown')
+                    @livewire('shared.layout.user-dropdown')
                 </div>
             </header>
 

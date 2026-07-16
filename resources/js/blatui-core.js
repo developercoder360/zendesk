@@ -71,7 +71,7 @@ const themeStore = {
     setInputStyle(inputStyle) { this.set('inputStyle', inputStyle); },
     setFontHeading(fontHeading) { this.set('fontHeading', fontHeading); },
 
-    toggle() {
+    toggle() { console.log('Toggle clicked! Current mode:', this.mode, 'isDark:', this.isDark);
         if (this.darkMode === false) return;
         this.setMode(this.isDark ? 'light' : 'dark');
     },
@@ -1271,9 +1271,9 @@ export function registerBlatUI(Alpine, options = {}) {
     // prefers-color-scheme), or false (hard light-only). The default does NOT auto-apply the
     // OS dark preference, so a light-only app never flips to an unreadable dark on a dark OS.
     if (options.darkMode !== undefined) themeStore.darkMode = options.darkMode;
-    Alpine.plugin(anchor);
-    Alpine.plugin(focus);
-    Alpine.plugin(collapse);
+    try { Alpine.plugin(anchor); } catch (e) {}
+    try { Alpine.plugin(focus); } catch (e) {}
+    try { Alpine.plugin(collapse); } catch (e) {}
     Alpine.store('theme', themeStore);
     Alpine.data('calendar', calendar);
     Alpine.data('blatMenu', blatMenu);

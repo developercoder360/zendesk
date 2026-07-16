@@ -73,33 +73,33 @@ new #[Layout('layouts.auth')] class extends Component
     <form wire:submit="resetPassword">
         <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-ui.label for="email">{{ __('Email') }}</x-ui.label>
+            <x-ui.input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
+            @error('email') <p class="mt-2 text-sm text-destructive">{{ $message }}</p> @enderror
         </div>
 
         <!-- Password -->
         <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-ui.label for="password">{{ __('Password') }}</x-ui.label>
+            <x-ui.input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+            @error('password') <p class="mt-2 text-sm text-destructive">{{ $message }}</p> @enderror
         </div>
 
         <!-- Confirm Password -->
         <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <x-ui.label for="password_confirmation">{{ __('Confirm Password') }}</x-ui.label>
 
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
+            <x-ui.input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
                           type="password"
                           name="password_confirmation" required autocomplete="new-password" />
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            @error('password_confirmation') <p class="mt-2 text-sm text-destructive">{{ $message }}</p> @enderror
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
+            <x-ui.button>
                 {{ __('Reset Password') }}
-            </x-primary-button>
+            </x-ui.button>
         </div>
     </form>
 </div>

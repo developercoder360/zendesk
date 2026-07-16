@@ -18,11 +18,7 @@ class SeedTenantDefaults
         // Temporarily set the permissions team ID to the new tenant so the role assigns correctly
         setPermissionsTeamId($tenantId);
 
-        // 1. Roles & Permissions
-        $adminRole = Role::create(['name' => 'Admin', 'tenant_id' => $tenantId]);
-        $agentRole = Role::create(['name' => 'Agent', 'tenant_id' => $tenantId]);
-
-        $event->owner->assignRole($adminRole);
+        // Roles & Permissions are now handled natively inside RegisterTenant action.
 
         // 2. Departments
         DB::table('departments')->insert([

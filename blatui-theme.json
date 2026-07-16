@@ -1,0 +1,12 @@
+{
+  "mode": "light",
+  "base": "olive",
+  "preset": "rose",
+  "radius": "0.75",
+  "inputStyle": "outline",
+  "font": "jakarta",
+  "fontHeading": "sans",
+  "shadow": "lg",
+  "spacing": "compact",
+  "tracking": "normal"
+}

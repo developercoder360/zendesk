@@ -35,6 +35,12 @@ return Application::configure(basePath: dirname(__DIR__))
                     \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
                 ])->group(base_path('routes/tenant.php'));
             }
+
+            if (file_exists(base_path('routes/api.php'))) {
+                Route::middleware('api')
+                    ->prefix('api')
+                    ->group(base_path('routes/api.php'));
+            }
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

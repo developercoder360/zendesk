@@ -16,4 +16,9 @@ class TicketStatus extends Model
     protected $casts = [
         'is_default' => 'boolean',
     ];
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'status_id');
+    }
 }
+

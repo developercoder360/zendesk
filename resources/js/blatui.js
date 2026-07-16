@@ -14,11 +14,15 @@
 // To add charts (after `php artisan blatui:add chart` + `npm i -D apexcharts`):
 //   import { registerCharts } from './blatui-charts.js';
 //   registerCharts(Alpine);            // alongside registerBlatUI, before start
-import Alpine from 'alpinejs';
 import { registerBlatUI } from './blatui-core.js';
 
-if (!window.Alpine) {
-    registerBlatUI(Alpine);
-    window.Alpine = Alpine;
-    Alpine.start();
+// Livewire 3 injects its own Alpine instance and fires 'alpine:init' before starting it.
+// We listen for this event and register our custom BlatUI components directly into Livewire's Alpine.
+// We also check if Alpine is already on the window (in case app.js deferred load finishes after livewire).
+if (window.Alpine) {
+    registerBlatUI(window.Alpine);
+} else {
+    document.addEventListener('alpine:init', () => {
+        registerBlatUI(window.Alpine);
+    });
 }
