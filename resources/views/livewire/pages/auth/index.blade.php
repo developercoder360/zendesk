@@ -68,16 +68,23 @@ new #[Layout('layouts.auth')] class extends Component {
             'loginForm.password' => 'required',
         ]);
 
-        $this->loginForm->authenticate();
+        $user = $this->loginForm->authenticate();
 
-        Session::regenerate();
+        if ($user->tenant_id === null) {
+            // Super Admin Login
+            Auth::login($user, $this->loginForm->remember);
+            Session::regenerate();
+            $this->redirect(route('central.dashboard', absolute: false), navigate: true);
+            return;
+        }
 
-        $user = Auth::user();
+        // Tenant Login - DO NOT create a session on the Central domain
         $domainRecord = \App\Models\Domain::where('tenant_id', $user->tenant_id)->first();
         
         if (! $domainRecord) {
-            $this->redirect(route('central.dashboard', absolute: false), navigate: true);
-            return;
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'loginForm.email' => 'Your workspace is not fully set up.',
+            ]);
         }
 
         $tenantDomain = $domainRecord->domain;
@@ -92,6 +99,7 @@ new #[Layout('layouts.auth')] class extends Component {
         cache()->put('tenant_login_' . $token, [
             'user_id' => $user->id,
             'redirect' => $redirectUrl,
+            'remember' => $this->loginForm->remember,
         ], now()->addMinutes(5));
 
         $scheme = request()->getScheme();

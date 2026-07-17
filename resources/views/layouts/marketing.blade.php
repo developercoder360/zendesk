@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="antialiased" data-base="zinc" data-theme="default" data-radius="0.5">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="antialiased" data-base="olive" data-theme="emerald" data-radius="1" data-input-style="inset" data-font="inter" data-font-heading="inter" data-shadow="xl" data-spacing="compact" data-tracking="tight">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">

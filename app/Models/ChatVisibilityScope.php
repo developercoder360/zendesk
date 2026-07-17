@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
-class Customer extends Model
+class ChatVisibilityScope extends Model
 {
     use HasFactory, BelongsToTenant;
 
-    protected $fillable = ["tenant_id", "name", "email", "phone"];
+    protected $fillable = ['tenant_id', 'tenant_user_id', 'scope'];
 
-    public function tickets()
+    public function tenantUser()
     {
-        return $this->hasMany(Ticket::class);
+        return $this->belongsTo(TenantUser::class);
     }
 }

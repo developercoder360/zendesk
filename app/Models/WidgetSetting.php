@@ -10,5 +10,14 @@ class WidgetSetting extends Model
 {
     use HasFactory, BelongsToTenant;
 
-    protected $fillable = ["tenant_id", "primary_color", "position", "language", "custom_css"];
+    protected $fillable = [
+        'tenant_id', 'primary_color', 'welcome_text', 'embed_key', 'allowed_domains', 'business_hours', 'offline_message'
+    ];
+
+    protected $casts = [
+        'allowed_domains' => 'array',
+        'business_hours' => 'array',
+    ];
+
+    // TODO: Add rate_limited_at or request tracking concern logic for API rate limiting in future phase
 }
