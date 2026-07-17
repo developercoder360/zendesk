@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     image: nginx:alpine
@@ -71,7 +69,7 @@ services:
       - app-network
 
   pgsql:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:pg16
     container_name: laravel_pgsql
     restart: unless-stopped
     environment:
