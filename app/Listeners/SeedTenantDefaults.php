@@ -21,10 +21,10 @@ class SeedTenantDefaults
         // Roles & Permissions are now handled natively inside RegisterTenant action.
 
         // 2. Departments
-        DB::table('departments')->insert([
-            ['tenant_id' => $tenantId, 'name' => 'General Support', 'description' => 'Default support department', 'created_at' => now(), 'updated_at' => now()],
-            ['tenant_id' => $tenantId, 'name' => 'Billing', 'description' => 'Billing related inquiries', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        // DB::table('departments')->insert([
+        //     ['tenant_id' => $tenantId, 'name' => 'General Support', 'description' => 'Default support department', 'created_at' => now(), 'updated_at' => now()],
+        //     ['tenant_id' => $tenantId, 'name' => 'Billing', 'description' => 'Billing related inquiries', 'created_at' => now(), 'updated_at' => now()],
+        // ]);
 
         // 3. Ticket Statuses
         DB::table('ticket_statuses')->insert([

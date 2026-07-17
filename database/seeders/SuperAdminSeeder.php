@@ -14,9 +14,9 @@ class SuperAdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $email = env('SUPER_ADMIN_EMAIL', 'admin@zendesk.test');
-        $password = env('SUPER_ADMIN_PASSWORD', 'password123!');
-        $name = env('SUPER_ADMIN_NAME', 'Super Admin');
+        $email = config('super_admin.email', 'admin@zendesk.test');
+        $password = config('super_admin.password', 'password123!');
+        $name = config('super_admin.name', 'Super Admin');
 
         $user = User::firstOrCreate(
             ['email' => $email],

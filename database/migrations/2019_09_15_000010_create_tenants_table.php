@@ -21,6 +21,7 @@ class CreateTenantsTable extends Migration
             $table->string('subdomain')->unique();
             $table->enum('status', ['active', 'suspended', 'trial'])->default('trial');
             $table->timestampTz('trial_ends_at')->nullable();
+            $table->json('data')->nullable();
             $table->timestamps();
         });
     }

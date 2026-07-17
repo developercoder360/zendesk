@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ticket_statuses', function (Blueprint $table) {
             $table->id();
-            $table->uuid('tenant_id');
+            $table->uuid('tenant_id')->nullable();
             $table->string('name');
             $table->string('color')->nullable();
             $table->boolean('is_default')->default(false);

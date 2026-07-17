@@ -2,7 +2,7 @@
 
 use App\Livewire\Forms\LoginForm;
 use App\Models\User;
-use App\Models\Plan;
+use App\Models\Package;
 use App\DTOs\RegistrationDTO;
 use App\DTOs\PaymentIntent;
 use App\Contracts\PaymentGatewayContract;
@@ -24,11 +24,11 @@ new #[Layout('layouts.auth')] class extends Component {
     public LoginForm $loginForm;
 
     // Registration Form state
-    public string $step = 'plan'; // plan, form, payment
-    public $plans = [];
+    public string $step = 'package'; // package, form, payment
+    public $packages = [];
 
     // Registration Form data
-    public int $planId = 0;
+    public int $packageId = 0;
     public string $ownerName = '';
     public string $companyName = '';
     public string $companySlug = '';
@@ -50,11 +50,11 @@ new #[Layout('layouts.auth')] class extends Component {
             $this->tab = 'signup';
         }
 
-        // Initialize Plans for Registration
-        $this->plans = Plan::all();
-        if ($this->plans->isEmpty()) {
-            $plan = Plan::create(['name' => 'Starter', 'slug' => 'starter', 'price' => 2900]);
-            $this->plans = collect([$plan]);
+        // Initialize Packages for Registration
+        $this->packages = Package::all();
+        if ($this->packages->isEmpty()) {
+            $package = Package::create(['name' => 'Starter', 'price' => 2900, 'billing_interval' => 'monthly', 'agent_limit' => 3, 'chat_limit_monthly' => 1000]);
+            $this->packages = collect([$package]);
         }
     }
 
@@ -108,9 +108,9 @@ new #[Layout('layouts.auth')] class extends Component {
 
     // --- REGISTRATION METHODS ---
 
-    public function selectPlan($planId)
+    public function selectPackage($packageId)
     {
-        $this->planId = $planId;
+        $this->packageId = $packageId;
         $this->step = 'form';
     }
 
@@ -157,7 +157,7 @@ new #[Layout('layouts.auth')] class extends Component {
         $this->paymentError = null;
 
         $intent = new PaymentIntent(
-            amount: Plan::find($this->planId)->price,
+            amount: Package::find($this->packageId)->price,
             currency: 'usd',
             paymentMethodId: $this->paymentMethodId,
             email: $this->email
@@ -179,7 +179,7 @@ new #[Layout('layouts.auth')] class extends Component {
             phone: $this->phone,
             country: $this->country,
             timezone: $this->timezone,
-            planId: $this->planId,
+            packageId: $this->packageId,
         );
 
         $tenant = $registerTenant->execute($dto);
@@ -264,20 +264,20 @@ new #[Layout('layouts.auth')] class extends Component {
             </div>
             
             <div class="flex items-center space-x-2 mb-6 text-xs font-medium text-muted-foreground">
-                <span class="{{ $step === 'plan' ? 'text-primary' : '' }}">1. Plan</span>
+                <span class="{{ $step === 'package' ? 'text-primary' : '' }}">1. Package</span>
                 <span>&mdash;</span>
                 <span class="{{ $step === 'form' ? 'text-primary' : '' }}">2. Details</span>
                 <span>&mdash;</span>
                 <span class="{{ $step === 'payment' ? 'text-primary' : '' }}">3. Payment</span>
             </div>
 
-            @if ($step === 'plan')
+            @if ($step === 'package')
                 <div class="space-y-4">
-                    @foreach ($plans as $plan)
-                        <div wire:click="selectPlan({{ $plan->id }})" class="border rounded-lg p-4 cursor-pointer hover:border-primary hover:bg-primary/5 transition-all flex justify-between items-center">
+                    @foreach ($packages as $package)
+                        <div wire:click="selectPackage({{ $package->id }})" class="border rounded-lg p-4 cursor-pointer hover:border-primary hover:bg-primary/5 transition-all flex justify-between items-center">
                             <div>
-                                <h3 class="font-bold text-foreground">{{ $plan->name }}</h3>
-                                <p class="text-sm text-muted-foreground">${{ number_format($plan->price / 100, 2) }} / month</p>
+                                <h3 class="font-bold text-foreground">{{ $package->name }}</h3>
+                                <p class="text-sm text-muted-foreground">${{ number_format($package->price / 100, 2) }} / month</p>
                             </div>
                             <x-lucide-chevron-right class="w-5 h-5 text-muted-foreground" />
                         </div>
@@ -324,7 +324,7 @@ new #[Layout('layouts.auth')] class extends Component {
                     </div>
 
                     <div class="flex items-center justify-between pt-4">
-                        <button type="button" wire:click="$set('step', 'plan')" class="text-sm text-muted-foreground hover:text-foreground">Back</button>
+                        <button type="button" wire:click="$set('step', 'package')" class="text-sm text-muted-foreground hover:text-foreground">Back</button>
                         <x-ui.button type="submit">Continue to Payment</x-ui.button>
                     </div>
                 </form>
@@ -337,8 +337,8 @@ new #[Layout('layouts.auth')] class extends Component {
                     @endif
                     
                     <div class="bg-muted p-4 rounded-lg flex justify-between items-center">
-                        <span class="font-medium">{{ App\Models\Plan::find($planId)->name ?? '' }} Plan</span>
-                        <span class="font-bold">${{ number_format((App\Models\Plan::find($planId)->price ?? 0) / 100, 2) }} <span class="text-sm font-normal text-muted-foreground">/mo</span></span>
+                        <span class="font-medium">{{ App\Models\Package::find($packageId)->name ?? '' }} Package</span>
+                        <span class="font-bold">${{ number_format((App\Models\Package::find($packageId)->price ?? 0) / 100, 2) }} <span class="text-sm font-normal text-muted-foreground">/mo</span></span>
                     </div>
 
                     <div class="space-y-2">

@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
+use App\Livewire\Pages\Marketing\Pricing;
+
 // Marketing Pages
 Volt::route('/', 'pages.marketing.index')->name('home');
-Volt::route('/pricing', 'pages.marketing.pricing')->name('pricing');
+Route::get('/pricing', Pricing::class)->name('pricing');
 Volt::route('/features', 'pages.marketing.features')->name('features');
 Volt::route('/about', 'pages.marketing.about')->name('about');
 Volt::route('/contact', 'pages.marketing.contact')->name('contact');

@@ -15,7 +15,7 @@ class RegistrationDTO
         public readonly string $phone,
         public readonly string $country,
         public readonly string $timezone,
-        public readonly int $planId,
+        public readonly int $packageId,
     ) {
     }
 }

@@ -47,5 +47,9 @@ COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 # Fix permissions for supervisor
 RUN mkdir -p /var/log/supervisor && chown -R $user:$user /var/log/supervisor
 
+# Install scheduler crontab
+COPY docker/php/scheduler-crontab /etc/cron.d/laravel-scheduler
+RUN chmod 0644 /etc/cron.d/laravel-scheduler && crontab /etc/cron.d/laravel-scheduler
+
 # Switch to non-root user
 USER $user

@@ -41,7 +41,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_articles', 'create_articles', 'edit_articles', 'publish_articles', 'delete_articles',
 
             // Billing
-            'view_billing', 'manage_subscription', 'download_invoices', 'upgrade_plan',
+            'view_billing', 'manage_subscription', 'download_invoices', 'upgrade_package',
 
             // Settings
             'view_settings', 'edit_settings',
@@ -74,7 +74,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $billingManager = Role::firstOrCreate(['name' => 'Billing Manager', 'tenant_id' => null]);
         $billingManager->givePermissionTo([
-            'view_dashboard', 'view_billing', 'manage_subscription', 'download_invoices', 'upgrade_plan',
+            'view_dashboard', 'view_billing', 'manage_subscription', 'download_invoices', 'upgrade_package',
         ]);
         
         $readOnlyAdmin = Role::firstOrCreate(['name' => 'Read Only Admin', 'tenant_id' => null]);

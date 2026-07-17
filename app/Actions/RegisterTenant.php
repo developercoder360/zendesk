@@ -19,11 +19,13 @@ class RegisterTenant
     {
         return DB::transaction(function () use ($dto) {
             $tenant = Tenant::create([
+                'name' => $dto->companyName,
+                'subdomain' => $dto->companySlug,
                 'company_name' => $dto->companyName,
                 'phone' => $dto->phone,
                 'country' => $dto->country,
                 'timezone' => $dto->timezone,
-                'plan_id' => $dto->planId,
+                'package_id' => $dto->packageId,
             ]);
 
             $centralDomain = config('tenancy.central_domains')[0] ?? 'zendesk.test';
@@ -50,7 +52,7 @@ class RegisterTenant
 
             $adminRole = Role::create(['name' => 'Company Admin', 'tenant_id' => $tenant->id]);
             $adminRole->givePermissionTo([
-                'view_dashboard', 'view_company', 'edit_company', 'view_users', 'create_users', 'edit_users', 'invite_users', 'view_teams', 'create_teams', 'edit_teams', 'view_tickets', 'create_tickets', 'assign_tickets', 'edit_tickets', 'close_tickets', 'delete_tickets', 'view_customers', 'create_customers', 'edit_customers', 'delete_customers', 'view_articles', 'create_articles', 'edit_articles', 'publish_articles', 'view_billing', 'manage_subscription', 'download_invoices', 'upgrade_plan', 'view_settings', 'edit_settings', 'view_reports', 'export_reports', 'view_notifications', 'send_notifications', 'view_api_keys', 'create_api_keys', 'revoke_api_keys'
+                'view_dashboard', 'view_company', 'edit_company', 'view_users', 'create_users', 'edit_users', 'invite_users', 'view_teams', 'create_teams', 'edit_teams', 'view_tickets', 'create_tickets', 'assign_tickets', 'edit_tickets', 'close_tickets', 'delete_tickets', 'view_customers', 'create_customers', 'edit_customers', 'delete_customers', 'view_articles', 'create_articles', 'edit_articles', 'publish_articles', 'view_billing', 'manage_subscription', 'download_invoices', 'upgrade_package', 'view_settings', 'edit_settings', 'view_reports', 'export_reports', 'view_notifications', 'send_notifications', 'view_api_keys', 'create_api_keys', 'revoke_api_keys'
             ]);
 
             Role::create(['name' => 'Agent', 'tenant_id' => $tenant->id])->givePermissionTo([

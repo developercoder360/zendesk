@@ -123,4 +123,11 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+
+    'super_admin' => [
+        'email' => env('SUPER_ADMIN_EMAIL', 'admin@zendesk.test'),
+        'password' => env('SUPER_ADMIN_PASSWORD', 'password123!'),
+        'name' => env('SUPER_ADMIN_NAME', 'Super Admin'),
+    ],
+
 ];

@@ -9,6 +9,7 @@ return new class extends Migration {
             $table->id();
             $table->uuid('tenant_id')->index();
             $table->string('name');
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
         });

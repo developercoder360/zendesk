@@ -8,13 +8,14 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, \Spatie\Permission\Traits\HasRoles;
 
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'tenant_id',
     ];
 
     protected $hidden = [

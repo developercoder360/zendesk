@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        config(['livewire.inject_assets' => false]);
 
         Gate::before(function ($user, $ability) {
             // Check if the user has a global Super Admin role
