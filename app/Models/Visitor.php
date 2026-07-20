@@ -8,10 +8,10 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Visitor extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'session_id', 'name', 'email', 'ip_address', 'current_page_url', 'first_seen_at', 'last_seen_at'
+        'tenant_id', 'session_id', 'name', 'email', 'ip_address', 'current_page_url', 'first_seen_at', 'last_seen_at',
     ];
 
     protected $casts = [

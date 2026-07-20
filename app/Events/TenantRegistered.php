@@ -16,6 +16,5 @@ class TenantRegistered
     public function __construct(
         public readonly Tenant $tenant,
         public readonly User $owner
-    ) {
-    }
+    ) {}
 }

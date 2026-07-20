@@ -1,9 +1,8 @@
 <?php
 
+use App\Livewire\Pages\Marketing\Pricing;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
-
-use App\Livewire\Pages\Marketing\Pricing;
 
 // Marketing Pages
 Volt::route('/', 'pages.marketing.index')->name('home');

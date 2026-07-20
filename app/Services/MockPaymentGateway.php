@@ -25,7 +25,7 @@ class MockPaymentGateway implements PaymentGatewayContract
         // Mock a successful payment
         return new PaymentResult(
             success: true,
-            transactionId: 'mock_txn_' . Str::random(10)
+            transactionId: 'mock_txn_'.Str::random(10)
         );
     }
 }

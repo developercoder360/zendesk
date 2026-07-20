@@ -10,8 +10,7 @@ class PaymentResult
         public readonly bool $success,
         public readonly string $transactionId,
         public readonly ?string $errorMessage = null,
-    ) {
-    }
+    ) {}
 
     public function successful(): bool
     {

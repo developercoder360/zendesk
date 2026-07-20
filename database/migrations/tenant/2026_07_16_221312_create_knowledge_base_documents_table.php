@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('source_reference')->nullable();
             $table->enum('status', ['processing', 'ready', 'failed'])->default('processing');
             $table->timestamps();
-            
+
             $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
         });
         DB::statement('ALTER TABLE knowledge_base_documents ENABLE ROW LEVEL SECURITY');

@@ -8,10 +8,10 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class CannedResponse extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'tenant_user_id', 'shortcut_key', 'title', 'body'
+        'tenant_id', 'tenant_user_id', 'shortcut_key', 'title', 'body',
     ];
 
     public function tenantUser()

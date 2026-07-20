@@ -8,10 +8,10 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Message extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'chat_id', 'body', 'sender_id', 'sender_type'
+        'tenant_id', 'chat_id', 'body', 'sender_id', 'sender_type',
     ];
 
     public function chat()

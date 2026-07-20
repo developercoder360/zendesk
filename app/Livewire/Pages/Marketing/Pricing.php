@@ -34,23 +34,24 @@ class Pricing extends Component
         foreach ((array) ($flags ?? []) as $key => $value) {
             $formattedKey = ucwords(str_replace('_', ' ', $key));
             if (is_array($value)) {
-                $formatted[] = $formattedKey . ': ' . implode(', ', $value);
+                $formatted[] = $formattedKey.': '.implode(', ', $value);
             } elseif (is_bool($value)) {
                 if ($value) {
                     $formatted[] = $formattedKey;
                 }
             } else {
-                $formatted[] = $formattedKey . ': ' . ucfirst((string) $value);
+                $formatted[] = $formattedKey.': '.ucfirst((string) $value);
             }
         }
+
         return $formatted;
     }
 
     public function featuresFor(Package $package): array
     {
         $features = [
-            $package->agent_limit . ' ' . Str::plural('agent', $package->agent_limit),
-            number_format($package->chat_limit_monthly) . ' chats/month',
+            $package->agent_limit.' '.Str::plural('agent', $package->agent_limit),
+            number_format($package->chat_limit_monthly).' chats/month',
         ];
 
         if ($package->ai_mode_allowed) {

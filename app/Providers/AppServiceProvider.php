@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Contracts\PaymentGatewayContract;
+use App\Services\MockPaymentGateway;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -17,8 +19,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            \App\Contracts\PaymentGatewayContract::class,
-            \App\Services\MockPaymentGateway::class
+            PaymentGatewayContract::class,
+            MockPaymentGateway::class
         );
     }
 
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->loadMigrationsFrom(database_path('migrations/tenant'));
         $this->configureDefaults();
         config(['livewire.inject_assets' => false]);
 

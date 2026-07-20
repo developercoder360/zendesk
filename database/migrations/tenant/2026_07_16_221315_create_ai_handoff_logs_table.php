@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('chat_id')->index();
             $table->enum('reason', ['agent_offline', 'agent_busy', 'escalated_by_ai']);
             $table->timestamps();
-            
+
             $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
             $table->foreign('chat_id')->references('id')->on('chats')->cascadeOnDelete();
         });

@@ -1,18 +1,19 @@
 <?php
 
-use App\Models\User;
-use App\Models\Tenant;
 use App\Models\Domain;
 use App\Models\Package;
-use Livewire\Volt\Volt;
-use Illuminate\Support\Facades\DB;
+use App\Models\Tenant;
+use App\Models\User;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Livewire\Volt\Volt;
+use Spatie\Permission\PermissionRegistrar;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->seed(\Database\Seeders\RolesAndPermissionsSeeder::class);
-    app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+    $this->seed(RolesAndPermissionsSeeder::class);
+    app()[PermissionRegistrar::class]->forgetCachedPermissions();
 });
 
 it('can register a new tenant and provision defaults', function () {
@@ -38,7 +39,7 @@ it('can register a new tenant and provision defaults', function () {
 
     $domain = Domain::where('tenant_id', $tenant->id)->first();
     $centralDomain = config('tenancy.central_domains')[0] ?? 'zendesk.test';
-    expect($domain->domain)->toBe('acme.' . $centralDomain);
+    expect($domain->domain)->toBe('acme.'.$centralDomain);
 
     $owner = User::where('email', 'john@acme.com')->first();
     expect($owner->tenant_id)->toBe($tenant->id);

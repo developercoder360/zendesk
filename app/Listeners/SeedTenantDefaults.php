@@ -7,7 +7,6 @@ namespace App\Listeners;
 use App\Events\TenantRegistered;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class SeedTenantDefaults
 {

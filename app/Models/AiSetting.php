@@ -8,10 +8,10 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class AiSetting extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'ai_mode_enabled', 'fallback_to_human', 'welcome_message', 'model_version'
+        'tenant_id', 'ai_mode_enabled', 'fallback_to_human', 'welcome_message', 'model_version',
     ];
 
     protected $casts = [

@@ -11,6 +11,5 @@ class PaymentIntent
         public readonly string $currency,
         public readonly string $paymentMethodId,
         public readonly string $email,
-    ) {
-    }
+    ) {}
 }

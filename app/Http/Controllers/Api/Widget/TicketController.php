@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Widget;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Services\Ticket\CreateTicketService;
+use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
@@ -18,19 +18,19 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "name" => "required|string|max:255",
-            "email" => "required|email|max:255",
-            "subject" => "required|string|max:255",
-            "description" => "required|string",
-            "priority" => "nullable|in:low,normal,high,urgent",
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'subject' => 'required|string|max:255',
+            'description' => 'required|string',
+            'priority' => 'nullable|in:low,normal,high,urgent',
         ]);
 
-        $result = $this->createTicketService->execute($validated, tenant("id"));
+        $result = $this->createTicketService->execute($validated, tenant('id'));
 
         return response()->json([
-            "message" => "Ticket created successfully.",
-            "ticket_id" => $result["ticket"]->id,
-            "token" => $result["token"]
+            'message' => 'Ticket created successfully.',
+            'ticket_id' => $result['ticket']->id,
+            'token' => $result['token'],
         ], 201);
     }
 }

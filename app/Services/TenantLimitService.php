@@ -19,13 +19,13 @@ class TenantLimitService
                 ->lockForUpdate()
                 ->first();
 
-            if (!$usage) {
+            if (! $usage) {
                 return false;
             }
 
             $package = DB::table('packages')->where('id', $usage->package_id)->first();
 
-            if (!$package) {
+            if (! $package) {
                 return false;
             }
 
@@ -54,13 +54,13 @@ class TenantLimitService
                 ->lockForUpdate()
                 ->first();
 
-            if (!$usage) {
+            if (! $usage) {
                 return false;
             }
 
             $package = DB::table('packages')->where('id', $usage->package_id)->first();
 
-            if (!$package) {
+            if (! $package) {
                 return false;
             }
 

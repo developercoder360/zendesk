@@ -2,11 +2,11 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
-use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -15,16 +15,19 @@ class LoginForm extends Form
 {
     #[Validate('required|string|email')]
     public string $email = '';
+
     #[Validate('required|string')]
     public string $password = '';
+
     #[Validate('boolean')]
     public bool $remember = false;
+
     /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws ValidationException
      */
-    public function authenticate(): \App\Models\User
+    public function authenticate(): User
     {
         $this->ensureIsNotRateLimited();
         $credentials = $this->only(['email', 'password']);
@@ -35,8 +38,10 @@ class LoginForm extends Form
             ]);
         }
         RateLimiter::clear($this->throttleKey());
+
         return User::where('email', $this->email)->firstOrFail();
     }
+
     /**
      * Ensure the authentication request is not rate limited.
      */
@@ -54,11 +59,12 @@ class LoginForm extends Form
             ]),
         ]);
     }
+
     /**
      * Get the authentication rate limiting throttle key.
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
+        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
     }
 }

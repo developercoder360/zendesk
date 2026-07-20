@@ -8,10 +8,10 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class KnowledgeBaseDocument extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'title', 'source_type', 'source_reference', 'status'
+        'tenant_id', 'title', 'source_type', 'source_reference', 'status',
     ];
 
     public function embeddings()

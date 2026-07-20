@@ -16,6 +16,5 @@ class RegistrationDTO
         public readonly string $country,
         public readonly string $timezone,
         public readonly int $packageId,
-    ) {
-    }
+    ) {}
 }

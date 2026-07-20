@@ -10,7 +10,7 @@ class Subscription extends Model
     use HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'package_id', 'status', 'starts_at', 'ends_at', 'gateway_subscription_id'
+        'tenant_id', 'package_id', 'status', 'starts_at', 'ends_at', 'gateway_subscription_id',
     ];
 
     protected $casts = [

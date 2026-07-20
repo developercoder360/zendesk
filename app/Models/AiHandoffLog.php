@@ -8,10 +8,10 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class AiHandoffLog extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'chat_id', 'reason'
+        'tenant_id', 'chat_id', 'reason',
     ];
 
     public function chat()

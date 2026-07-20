@@ -8,10 +8,10 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class WidgetSetting extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'primary_color', 'welcome_text', 'embed_key', 'allowed_domains', 'business_hours', 'offline_message'
+        'tenant_id', 'primary_color', 'welcome_text', 'embed_key', 'allowed_domains', 'business_hours', 'offline_message',
     ];
 
     protected $casts = [

@@ -11,7 +11,7 @@ class Package extends Model
 
     protected $fillable = [
         'name', 'price', 'billing_interval', 'agent_limit', 'chat_limit_monthly',
-        'ai_mode_allowed', 'feature_flags', 'is_active'
+        'ai_mode_allowed', 'feature_flags', 'is_active',
     ];
 
     protected $casts = [

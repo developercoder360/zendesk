@@ -2,13 +2,12 @@
 
 namespace App\Livewire\Public\Widget;
 
-use Livewire\Component;
 use App\Models\Customer;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\DB;
-use Stancl\Tenancy\Facades\Tenancy;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
+use Livewire\Component;
 
 #[Layout('layouts.widget')]
 class TicketForm extends Component

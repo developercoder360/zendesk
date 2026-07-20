@@ -10,9 +10,7 @@ class ChatAssignmentService
 {
     /**
      * Attempts to atomically claim a chat for an agent.
-     * 
-     * @param Chat $chat
-     * @param TenantUser $agent
+     *
      * @return bool True if claim succeeded, false if already claimed.
      */
     public function claim(Chat $chat, TenantUser $agent): bool
@@ -21,7 +19,7 @@ class ChatAssignmentService
             // Lock the chat row for update
             $lockedChat = Chat::where('id', $chat->id)->lockForUpdate()->first();
 
-            if (!$lockedChat || $lockedChat->assigned_agent_id !== null) {
+            if (! $lockedChat || $lockedChat->assigned_agent_id !== null) {
                 return false;
             }
 

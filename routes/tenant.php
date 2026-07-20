@@ -2,11 +2,17 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Public\Ticket\ViewTicket;
+use App\Livewire\Public\Widget\TicketForm;
+use App\Livewire\Tenant\Tickets\TicketDetail;
+use App\Livewire\Tenant\Tickets\TicketList;
+use App\Models\User;
+use Illuminate\Http\Middleware\FrameGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+
 /*
 |--------------------------------------------------------------------------
 | Tenant Routes
@@ -24,7 +30,7 @@ Route::get('/', function () {
 });
 Route::get('/tenant-login', function (Request $request) {
     $token = $request->get('token');
-    $data = cache()->pull('tenant_login_' . $token);
+    $data = cache()->pull('tenant_login_'.$token);
     if (! $data) {
         abort(401, 'Invalid or expired login token.');
     }
@@ -32,6 +38,7 @@ Route::get('/tenant-login', function (Request $request) {
     if ($user) {
         Auth::login($user, $data['remember'] ?? false);
     }
+
     return redirect($data['redirect'] ?? '/dashboard');
 })->name('tenant.login');
 Volt::route('dashboard', 'tenant.dashboard')->middleware(['auth', 'verified'])->name('tenant.dashboard');
@@ -43,13 +50,13 @@ Route::middleware(['auth', 'can:view_settings'])->prefix('settings/roles')->name
 });
 
 Route::middleware(['auth'])->prefix('tickets')->name('tenant.tickets.')->group(function () {
-    Route::get('/', \App\Livewire\Tenant\Tickets\TicketList::class)->name('index');
-    Route::get('/{ticket}', \App\Livewire\Tenant\Tickets\TicketDetail::class)->name('show');
+    Route::get('/', TicketList::class)->name('index');
+    Route::get('/{ticket}', TicketDetail::class)->name('show');
 });
 
 // Public Ticket View (Tokenized)
-Route::get('/t/{token}', \App\Livewire\Public\Ticket\ViewTicket::class)->name('tenant.tickets.public');
+Route::get('/t/{token}', ViewTicket::class)->name('tenant.tickets.public');
 
 // Embeddable Widget
-Route::get('/widget/frame', \App\Livewire\Public\Widget\TicketForm::class)->name('tenant.widget.frame')
-    ->withoutMiddleware([\Illuminate\Http\Middleware\FrameGuard::class]);
+Route::get('/widget/frame', TicketForm::class)->name('tenant.widget.frame')
+    ->withoutMiddleware([FrameGuard::class]);

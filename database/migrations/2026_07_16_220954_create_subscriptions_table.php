@@ -17,7 +17,7 @@ return new class extends Migration
             $table->timestamp('starts_at');
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('tenant_id')->references('id')->on('tenants')->cascadeOnDelete();
             $table->foreign('package_id')->references('id')->on('packages')->cascadeOnDelete();
         });

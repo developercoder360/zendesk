@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Role;
 
 class SuperAdminSeeder extends Seeder
 {
@@ -28,11 +28,11 @@ class SuperAdminSeeder extends Seeder
         );
 
         setPermissionsTeamId(null); // Ensure we're in central context
-        
+
         // Ensure the role exists
         $role = Role::firstOrCreate(['name' => 'Super Admin', 'tenant_id' => null]);
-        
-        if (!$user->hasRole('Super Admin')) {
+
+        if (! $user->hasRole('Super Admin')) {
             $user->assignRole($role);
         }
     }

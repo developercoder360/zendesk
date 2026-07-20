@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
-use App\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsSeeder extends Seeder
@@ -66,7 +66,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Super Admin gets everything (handled via Gate::before in AppServiceProvider, but we can assign anyway)
         $superAdmin = Role::firstOrCreate(['name' => 'Super Admin', 'tenant_id' => null]);
-        
+
         $platformAdmin = Role::firstOrCreate(['name' => 'Platform Admin', 'tenant_id' => null]);
         $platformAdmin->givePermissionTo([
             'view_dashboard', 'view_company', 'edit_company', 'view_users', 'view_billing', 'manage_subscription', 'view_settings', 'edit_settings',
@@ -76,7 +76,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $billingManager->givePermissionTo([
             'view_dashboard', 'view_billing', 'manage_subscription', 'download_invoices', 'upgrade_package',
         ]);
-        
+
         $readOnlyAdmin = Role::firstOrCreate(['name' => 'Read Only Admin', 'tenant_id' => null]);
         $readOnlyAdmin->givePermissionTo([
             'view_dashboard', 'view_company', 'view_users', 'view_teams', 'view_tickets', 'view_customers', 'view_articles', 'view_billing', 'view_settings', 'view_reports', 'view_notifications',
