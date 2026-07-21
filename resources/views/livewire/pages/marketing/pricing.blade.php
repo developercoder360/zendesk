@@ -57,7 +57,7 @@
                                     <x-ui.button class="w-full" variant="{{ $package->is_popular ? 'default' : 'outline' }}">Current Package</x-ui.button>
                                 </a>
                             @else
-                                <a href="/register" class="w-full">
+                                <a href="{{ route('register', ['plan' => $package->slug, 'returnTo' => request()->fullUrl()]) }}" class="w-full">
                                     <x-ui.button class="w-full" variant="{{ $package->is_popular ? 'default' : 'outline' }}">Get Started</x-ui.button>
                                 </a>
                             @endauth
@@ -144,7 +144,7 @@
                         <x-ui.button size="lg" class="px-8">Go to Dashboard</x-ui.button>
                     </a>
                 @else
-                    <a href="/register">
+                    <a href="{{ route('register', ['returnTo' => request()->fullUrl()]) }}">
                         <x-ui.button size="lg" class="px-8">Start your free trial</x-ui.button>
                     </a>
                 @endauth

@@ -4,11 +4,11 @@
 This application uses a Single-Database multi-tenancy approach, implemented via `stancl/tenancy` v3.
 - All tenants share the same PostgreSQL database.
 - Tenant isolation is enforced at the query level using `Stancl\Tenancy\Database\Concerns\BelongsToTenant` (which automatically applies the `TenantScope`).
-- Domain routing: The central app runs on `zendesk.test`. Each tenant runs on a subdomain (e.g., `acme.zendesk.test`).
+- Domain routing: The central app runs on `localhost:8000`. Each tenant runs on a subdomain (e.g., `acme.localhost:8000`).
 
 ## Security & Authentication
-- **Central Auth**: Authentication is built on Laravel Breeze. Users can only log in at `zendesk.test/login`. No login pages exist on tenant subdomains.
-- **Open Redirect Prevention**: After a user authenticates centrally, they are directed to their tenant domain. We don't use raw `?redirect=` query parameters. Instead, a short-lived token (cached server-side) containing the target URL and user ID is generated. The user is redirected to `{tenant}.zendesk.test/tenant-login?token={token}`, which verifies the server-side cache and authenticates the user into the tenant context securely.
+- **Central Auth**: Authentication is built on Laravel Breeze. Users can only log in at `localhost:8000/login`. No login pages exist on tenant subdomains.
+- **Open Redirect Prevention**: After a user authenticates centrally, they are directed to their tenant domain. We don't use raw `?redirect=` query parameters. Instead, a short-lived token (cached server-side) containing the target URL and user ID is generated. The user is redirected to `{tenant}.localhost:8000/tenant-login?token={token}`, which verifies the server-side cache and authenticates the user into the tenant context securely.
 - **Enumeration Prevention**: The registration flow (`companySlug`) validates domains in real time. We use an aggressive rate limit on the payment/processing endpoint to prevent brute-force tenant enumeration.
 
 ## Tenant Provisioning (Domain Events)
