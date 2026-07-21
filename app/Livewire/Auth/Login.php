@@ -19,7 +19,7 @@ class Login extends Component
     // Login Form
     public LoginForm $loginForm;
 
-    public function login(): void
+    public function login()
     {
         $this->validate([
             'loginForm.email' => 'required|email',
