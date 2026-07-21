@@ -30,3 +30,8 @@ When creating a new Model that belongs to a tenant:
 Pest is installed for feature tests:
 `php vendor/bin/pest tests/Feature/Tenancy`
 Tests verify that tenant data is isolated correctly.
+
+## Known Issues & PHP 8.4 Compatibility
+- **`stancl/tenancy` Deprecation Warning**: PHP 8.4 tightened rules around accessing trait static properties directly on the trait. `stancl/tenancy` v3.10.0 and earlier does this internally (`BelongsToTenant::$tenantIdColumn`), causing an `E_DEPRECATED` warning. This warning is functionally harmless and does not affect tenant resolution.
+- **Suppression**: To prevent log noise and debugger interruptions, we have narrowly suppressed this specific warning via `set_error_handler` in `AppServiceProvider::boot()`. 
+- **Action Required**: Remove this suppression once `stancl/tenancy` releases a PHP 8.4-compatible version. Check `composer show stancl/tenancy` periodically for updates.

@@ -29,6 +29,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $previousHandler = set_error_handler(function ($level, $message, $file = '', $line = 0) use (&$previousHandler) {
+            if ($level === E_DEPRECATED && str_contains($message, 'Stancl\Tenancy\Database\Concerns\BelongsToTenant::$tenantIdColumn is deprecated')) {
+                return true;
+            }
+            return $previousHandler ? $previousHandler($level, $message, $file, $line) : false;
+        });
+
         $this->loadMigrationsFrom(database_path('migrations/tenant'));
         $this->configureDefaults();
         config(['livewire.inject_assets' => false]);
