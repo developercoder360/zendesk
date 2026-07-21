@@ -1,12 +1,3 @@
-<?php
-
-use Livewire\Attributes\Layout;
-use Livewire\Volt\Component;
-
-new #[Layout('layouts.central')] class extends Component {
-    //
-}; ?>
-
 <div>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-foreground leading-tight">

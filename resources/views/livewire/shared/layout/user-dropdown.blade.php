@@ -1,17 +1,3 @@
-<?php
-
-use App\Livewire\Actions\Logout;
-use Livewire\Volt\Component;
-
-new class extends Component {
-    public function goTo(string $url): void { $this->redirect($url, navigate: true); }
-    public function logout(Logout $logout): void
-    {
-        $logout();
-        $this->redirect('/', navigate: true);
-    }
-}; ?>
-
 <x-ui.dropdown-menu>
     <x-ui.dropdown-menu-trigger>
         <button aria-label="Account">

@@ -1,33 +1,3 @@
-<?php
-
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
-
-new
-#[Layout('layouts.marketing')]
-#[Title('Contact Sales | Zendesk')]
-class extends Component {
-    public string $name = '';
-    public string $email = '';
-    public string $company = '';
-    public string $message = '';
-    public bool $sent = false;
-
-    public function submit()
-    {
-        $this->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'company' => 'required',
-            'message' => 'required',
-        ]);
-
-        // Logic to send email or save lead
-        $this->sent = true;
-    }
-}; ?>
-
 <div>
     <section class="py-24 lg:py-32">
         <div class="container mx-auto px-4 md:px-6 max-w-2xl">

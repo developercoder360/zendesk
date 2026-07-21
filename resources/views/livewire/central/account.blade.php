@@ -1,11 +1,3 @@
-<?php
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-
-new #[Layout('layouts.central')] class extends Component {
-    //
-}; ?>
-
 <div class="mx-auto max-w-5xl px-6 py-10">
     <h1 class="text-3xl font-bold tracking-tight">Settings</h1>
     <p class="text-muted-foreground mt-1">Manage your profile, preferences and account.</p>

@@ -1,16 +1,3 @@
-<?php
-
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
-
-new
-#[Layout('layouts.marketing')]
-#[Title('About Us | Zendesk')]
-class extends Component {
-    //
-}; ?>
-
 <div>
     <section class="py-24 lg:py-32">
         <div class="container mx-auto px-4 md:px-6 max-w-4xl text-center">

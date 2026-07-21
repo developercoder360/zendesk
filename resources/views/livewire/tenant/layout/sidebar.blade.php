@@ -1,11 +1,3 @@
-<?php
-
-use Livewire\Volt\Component;
-
-new class extends Component {
-    //
-}; ?>
-
 <div class="flex h-full flex-col">
     <div class="flex h-16 shrink-0 items-center px-6">
         <a href="{{ route('tenant.dashboard') }}" class="flex items-center gap-2 font-semibold">

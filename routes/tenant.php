@@ -41,12 +41,17 @@ Route::get('/tenant-login', function (Request $request) {
 
     return redirect($data['redirect'] ?? '/dashboard');
 })->name('tenant.login');
-Volt::route('dashboard', 'tenant.dashboard')->middleware(['auth', 'verified'])->name('tenant.dashboard');
-Volt::route('profile', 'tenant.profile')->middleware(['auth'])->name('tenant.profile');
+use App\Livewire\Tenant\Dashboard;
+use App\Livewire\Tenant\Profile;
+use App\Livewire\Tenant\Settings\RolesList;
+use App\Livewire\Tenant\Settings\RoleForm;
+
+Route::get('dashboard', Dashboard::class)->middleware(['auth', 'verified'])->name('tenant.dashboard');
+Route::get('profile', Profile::class)->middleware(['auth'])->name('tenant.profile');
 Route::middleware(['auth', 'can:view_settings'])->prefix('settings/roles')->name('tenant.settings.roles.')->group(function () {
-    Volt::route('/', 'tenant.settings.roles-list')->name('index');
-    Volt::route('/create', 'tenant.settings.role-form')->name('create');
-    Volt::route('/{role}/edit', 'tenant.settings.role-form')->name('edit');
+    Route::get('/', RolesList::class)->name('index');
+    Route::get('/create', RoleForm::class)->name('create');
+    Route::get('/{role}/edit', RoleForm::class)->name('edit');
 });
 
 Route::middleware(['auth'])->prefix('tickets')->name('tenant.tickets.')->group(function () {

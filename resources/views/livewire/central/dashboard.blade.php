@@ -1,35 +1,3 @@
-<?php
-
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-
-new #[Layout('layouts.central')] class extends Component {
-    public $user;
-    public $domain;
-    
-    public function mount()
-    {
-        $this->user = auth()->user();
-        $this->domain = \App\Models\Domain::where('tenant_id', $this->user->tenant_id)->first();
-    }
-
-    public function launchWorkspace()
-    {
-        if (! $this->domain) {
-            return;
-        }
-
-        $token = \Illuminate\Support\Str::random(64);
-        cache()->put('tenant_login_' . $token, [
-            'user_id' => $this->user->id,
-            'redirect' => '/dashboard',
-        ], now()->addMinutes(5));
-
-        $scheme = request()->getScheme();
-        $this->redirect($scheme . '://' . $this->domain->domain . '/tenant-login?token=' . $token);
-    }
-}; ?>
-
 <div class="space-y-6">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

@@ -1,16 +1,3 @@
-<?php
-
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
-
-new
-#[Layout('layouts.marketing')]
-#[Title('Features | Zendesk')]
-class extends Component {
-    //
-}; ?>
-
 <div>
 <x-slot:meta_description>Discover the features that make Zendesk the leading customer service software platform.</x-slot:meta_description>
 

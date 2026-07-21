@@ -1,38 +1,3 @@
-<?php
-
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\ValidationException;
-use Livewire\Volt\Component;
-
-new class extends Component
-{
-    public string $current_password = '';
-    public string $password = '';
-    public string $password_confirmation = '';
-
-    public function updatePassword(): void
-    {
-        try {
-            $validated = $this->validate([
-                'current_password' => ['required', 'string', 'current_password'],
-                'password' => ['required', 'string', Password::defaults(), 'confirmed'],
-            ]);
-        } catch (ValidationException $e) {
-            $this->reset('current_password', 'password', 'password_confirmation');
-            throw $e;
-        }
-
-        Auth::user()->update([
-            'password' => Hash::make($validated['password']),
-        ]);
-
-        $this->reset('current_password', 'password', 'password_confirmation');
-        $this->dispatch('password-updated');
-    }
-}; ?>
-
 <x-ui.card variant="sectioned" id="security" class="scroll-mt-24">
     <x-ui.card-header>
         <x-ui.card-title>Security</x-ui.card-title>

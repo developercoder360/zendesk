@@ -1,28 +1,3 @@
-<?php
-
-use App\Models\Role;
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-
-new #[Layout('layouts.tenant')] class extends Component {
-    public function with(): array
-    {
-        return [
-            'roles' => Role::withCount('users')->where('tenant_id', tenant('id'))->get(),
-        ];
-    }
-
-    public function deleteRole(Role $role)
-    {
-        if ($role->name === 'Owner' || $role->name === 'Company Admin') {
-            $this->addError('error', 'Cannot delete system roles.');
-            return;
-        }
-        
-        $role->delete();
-    }
-}; ?>
-
 <div class="space-y-6 max-w-6xl mx-auto">
     <nav class="flex items-center text-sm text-muted-foreground mb-4">
         <span class="hover:text-foreground transition-colors cursor-pointer">Settings</span>

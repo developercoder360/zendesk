@@ -1,16 +1,3 @@
-<?php
-
-use Livewire\Volt\Component;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
-
-new
-#[Layout('layouts.marketing')]
-#[Title('Customer Service Software & Sales CRM | Zendesk')]
-class extends Component {
-    //
-}; ?>
-
 <div>
 <x-slot:meta_description>Zendesk is a customer service platform that builds software to meet customer needs, set your team up for success, and keep your business in sync.</x-slot:meta_description>
 
