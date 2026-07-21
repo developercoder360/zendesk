@@ -45,6 +45,7 @@ use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Profile;
 use App\Livewire\Tenant\Settings\RolesList;
 use App\Livewire\Tenant\Settings\RoleForm;
+use App\Livewire\Tenant\Settings\Domains;
 
 Route::get('dashboard', Dashboard::class)->middleware(['auth', 'verified'])->name('tenant.dashboard');
 Route::get('profile', Profile::class)->middleware(['auth'])->name('tenant.profile');
@@ -52,6 +53,10 @@ Route::middleware(['auth', 'can:view_settings'])->prefix('settings/roles')->name
     Route::get('/', RolesList::class)->name('index');
     Route::get('/create', RoleForm::class)->name('create');
     Route::get('/{role}/edit', RoleForm::class)->name('edit');
+});
+
+Route::middleware(['auth', 'can:view_settings'])->prefix('settings/domains')->name('tenant.settings.domains.')->group(function () {
+    Route::get('/', Domains::class)->name('index');
 });
 
 Route::middleware(['auth'])->prefix('tickets')->name('tenant.tickets.')->group(function () {

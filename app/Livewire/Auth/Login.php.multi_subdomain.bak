@@ -34,8 +34,7 @@ class Login extends Component
             return;
         }
         // Tenant Login - DO NOT create a session on the Central domain
-        $tenant = \App\Models\Tenant::find($user->tenant_id);
-        $domainRecord = $tenant ? $tenant->primaryDomain() : null;
+        $domainRecord = Domain::where('tenant_id', $user->tenant_id)->first();
         if (!$domainRecord) {
             throw ValidationException::withMessages([
                 'loginForm.email' => 'Your workspace is not fully set up.',
@@ -57,11 +56,8 @@ class Login extends Component
             ],
             now()->addMinutes(5),
         );
-        $scheme = parse_url(config('app.url'), PHP_URL_SCHEME) ?: request()->getScheme();
-        $port = parse_url(config('app.url'), PHP_URL_PORT);
-        $portSuffix = $port ? ':' . $port : '';
-        
-        return redirect()->away($scheme . '://' . $tenantDomain . $portSuffix . '/tenant-login?token=' . $token);
+        $scheme = request()->getScheme();
+        $this->redirect($scheme . '://' . $tenantDomain . '/tenant-login?token=' . $token);
     }
 
     public function render()

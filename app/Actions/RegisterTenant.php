@@ -34,6 +34,7 @@ class RegisterTenant
             Domain::create([
                 'domain' => $dto->companySlug.'.'.$centralDomain,
                 'tenant_id' => $tenant->id,
+                'is_primary' => true,
             ]);
 
             $owner = User::create([

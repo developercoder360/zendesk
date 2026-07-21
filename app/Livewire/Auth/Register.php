@@ -174,8 +174,11 @@ class Register extends Component
             now()->addMinutes(5),
         );
         
-        $scheme = request()->getScheme();
-        $this->redirect($scheme . '://' . $domain . '/tenant-login?token=' . $token);
+        $scheme = parse_url(config('app.url'), PHP_URL_SCHEME) ?: request()->getScheme();
+        $port = parse_url(config('app.url'), PHP_URL_PORT);
+        $portSuffix = $port ? ':' . $port : '';
+        
+        return redirect()->away($scheme . '://' . $domain . $portSuffix . '/tenant-login?token=' . $token);
     }
 
     public function render()
