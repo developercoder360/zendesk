@@ -37,23 +37,23 @@
                     </tr>
                 </thead>
                 <tbody class="[&_tr:last-child]:border-0">
-                    @forelse($users as $user)
+                    @forelse($users as $tenantUser)
                         <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                             <td class="p-4 align-middle">
                                 <div class="flex items-center gap-3">
                                     <div class="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
-                                        {{ substr($user->name, 0, 2) }}
+                                        {{ substr($tenantUser->user->name ?? '?', 0, 2) }}
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="font-medium">{{ $user->name }}</span>
-                                        <span class="text-xs text-muted-foreground">{{ $user->email }}</span>
+                                        <span class="font-medium">{{ $tenantUser->user->name ?? 'Unknown User' }}</span>
+                                        <span class="text-xs text-muted-foreground">{{ $tenantUser->user->email ?? 'N/A' }}</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="p-4 align-middle capitalize">{{ $user->role }}</td>
-                            <td class="p-4 align-middle text-muted-foreground">{{ $user->tenantProfile->position ?? '—' }}</td>
+                            <td class="p-4 align-middle capitalize">{{ $tenantUser->user->role ?? 'N/A' }}</td>
+                            <td class="p-4 align-middle text-muted-foreground">{{ $tenantUser->position ?? '—' }}</td>
                             <td class="p-4 align-middle">
-                                @if($user->tenantProfile?->is_active)
+                                @if($tenantUser->is_active)
                                     <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-500">Active</span>
                                 @else
                                     <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-rose-500/10 text-rose-500">Inactive</span>
@@ -61,11 +61,11 @@
                             </td>
                             <td class="p-4 align-middle text-right">
                                 <div class="flex justify-end gap-2">
-                                    <x-ui.button variant="ghost" size="sm" wire:click="openEditModal({{ $user->id }})">
+                                    <x-ui.button variant="ghost" size="sm" wire:click="openEditModal({{ $tenantUser->user_id }})">
                                         <x-lucide-pencil class="size-4" />
                                     </x-ui.button>
-                                    @if($user->id !== auth()->id())
-                                        <x-ui.button variant="ghost" size="sm" class="text-destructive hover:text-destructive" wire:click="openDeleteModal({{ $user->id }})">
+                                    @if($tenantUser->user_id !== auth()->id())
+                                        <x-ui.button variant="ghost" size="sm" class="text-destructive hover:text-destructive" wire:click="openDeleteModal({{ $tenantUser->user_id }})">
                                             <x-lucide-trash-2 class="size-4" />
                                         </x-ui.button>
                                     @endif

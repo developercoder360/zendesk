@@ -87,21 +87,23 @@ class UserIndex extends Component
 
     public function render()
     {
-        $query = User::with('tenantProfile')
-            ->where('tenant_id', tenant('id'));
+        $query = \App\Models\TenantUser::with('user');
 
         if (!empty($this->search)) {
-            $query->where(function($q) {
+            $query->whereHas('user', function($q) {
                 $q->where('name', 'ilike', '%' . $this->search . '%')
                   ->orWhere('email', 'ilike', '%' . $this->search . '%');
             });
         }
 
         if (!empty($this->roleFilter)) {
-            $query->where('role', $this->roleFilter);
+            $query->whereHas('user', function($q) {
+                $q->where('role', $this->roleFilter);
+            });
         }
 
-        $users = $query->orderBy('name')->paginate(10);
+        // We can order by created_at since ordering by a related table column requires a join
+        $users = $query->latest()->paginate(10);
 
         return view('livewire.tenant.users.user-index', [
             'users' => $users

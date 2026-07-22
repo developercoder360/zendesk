@@ -12,10 +12,12 @@ class UserDropdown extends Component
         $this->redirect($url, navigate: true);
     }
 
-    public function logout(Logout $logout): void
+    public function logout(Logout $logout)
     {
         $logout();
-        $this->redirect('/', navigate: true);
+        
+        $centralUrl = rtrim(config('app.url'), '/');
+        return redirect()->away($centralUrl . '/login');
     }
 
     public function render()
