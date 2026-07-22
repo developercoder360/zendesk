@@ -1,6 +1,6 @@
 <div class="flex h-full flex-col">
     <div class="flex h-16 shrink-0 items-center px-6">
-        <a href="{{ route('tenant.dashboard') }}" class="flex items-center gap-2 font-semibold">
+        <a href="{{ route('tenant.dashboard') }}" wire:navigate class="flex items-center gap-2 font-semibold">
             <span class="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
                 <x-lucide-box class="size-5" />
             </span> 
@@ -12,27 +12,27 @@
         <nav class="grid gap-1 px-4">
             <div class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Workspace</div>
             
-            <a href="{{ route('tenant.dashboard') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all', 'bg-accent text-accent-foreground' => request()->routeIs('tenant.dashboard'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.dashboard')])>
+            <a href="{{ route('tenant.dashboard') }}" wire:navigate @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all', 'bg-accent text-accent-foreground' => request()->routeIs('tenant.dashboard'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.dashboard')])>
                 <x-lucide-layout-dashboard class="size-4" />
                 Dashboard
             </a>
 
-            <a href="{{ route('tenant.tickets.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all', 'bg-accent text-accent-foreground' => request()->routeIs('tenant.tickets.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.tickets.*')])>
+            <a href="{{ route('tenant.tickets.index') }}" wire:navigate @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all', 'bg-accent text-accent-foreground' => request()->routeIs('tenant.tickets.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.tickets.*')])>
                 <x-lucide-ticket class="size-4" />
                 Tickets
             </a>
 
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
+            <a href="#" wire:navigate class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
                 <x-lucide-users class="size-4" />
                 Customers
             </a>
 
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
+            <a href="#" wire:navigate class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
                 <x-lucide-book class="size-4" />
                 Knowledge Base
             </a>
 
-            <a href="#" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
+            <a href="#" wire:navigate class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
                 <x-lucide-bar-chart class="size-4" />
                 Reports
             </a>
@@ -48,15 +48,15 @@
                     <x-lucide-chevron-down class="size-4 transition-transform" x-bind:class="open ? 'rotate-180' : ''" />
                 </button>
                 <div x-show="open" x-collapse class="pl-9 pr-3 py-1 space-y-1">
-                    <a href="#" class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">General</a>
-                    <a href="#" class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Company</a>
-                    <a href="#" class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Users</a>
-                    <a href="#" class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Teams</a>
+                    <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">General</a>
+                    <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Company</a>
+                    <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Users</a>
+                    <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Teams</a>
                     @can('view_settings')
-                    <a href="{{ route('tenant.settings.roles.index') }}" @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.roles.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.roles.*')])>Roles & Permissions</a>
+                    <a href="{{ route('tenant.settings.roles.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.roles.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.roles.*')])>Roles & Permissions</a>
                     @endcan
-                    <a href="#" class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Notifications</a>
-                    <a href="#" class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">API</a>
+                    <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Notifications</a>
+                    <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">API</a>
                 </div>
             </div>
         </nav>

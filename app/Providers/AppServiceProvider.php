@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -39,6 +40,10 @@ class AppServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(database_path('migrations/tenant'));
         $this->configureDefaults();
         config(['livewire.inject_assets' => false]);
+        
+        Vite::useScriptTagAttributes(['data-navigate-track' => 'reload']);
+        Vite::useStyleTagAttributes(['data-navigate-track' => 'reload']);
+        Vite::usePreloadTagAttributes(['data-navigate-track' => 'reload']);
 
         Gate::before(function ($user, $ability) {
             // Check if the user has a global Super Admin role
