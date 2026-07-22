@@ -13,9 +13,14 @@ class TenantUser extends Model
     protected $fillable = [
         'tenant_id',
         'user_id',
-        'department_id', // Note: in create_tenant_users we had department_id. In the new alter migration I didn't drop it.
+        'department_id',
         'shift',
-        'status'
+        'status',
+        'position',
+        'phone',
+        'avatar',
+        'is_active',
+        'joined_at'
     ];
 
     public function user(): BelongsTo

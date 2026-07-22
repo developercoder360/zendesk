@@ -50,7 +50,7 @@
                 <div x-show="open" x-collapse class="pl-9 pr-3 py-1 space-y-1">
                     <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">General</a>
                     <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Company</a>
-                    <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Users</a>
+                    <a href="{{ route('tenant.users.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.users.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.users.*')])>Users</a>
                     <a href="#" wire:navigate class="block rounded-md px-3 py-1.5 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">Teams</a>
                     @can('view_settings')
                     <a href="{{ route('tenant.settings.roles.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.roles.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.roles.*')])>Roles & Permissions</a>

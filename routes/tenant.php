@@ -59,6 +59,11 @@ Route::middleware(['auth', 'can:view_settings'])->prefix('settings/domains')->na
     Route::get('/', Domains::class)->name('index');
 });
 
+use App\Livewire\Tenant\Users\UserIndex;
+Route::middleware(['auth'])->prefix('users')->name('tenant.users.')->group(function () {
+    Route::get('/', UserIndex::class)->name('index');
+});
+
 Route::middleware(['auth'])->prefix('tickets')->name('tenant.tickets.')->group(function () {
     Route::get('/', TicketList::class)->name('index');
     Route::get('/{ticket}', TicketDetail::class)->name('show');
