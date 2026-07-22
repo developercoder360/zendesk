@@ -21,4 +21,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
+    public function tenantProfile()
+    {
+        return $this->hasOne(TenantUser::class);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin' && is_null($this->tenant_id);
+    }
 }
