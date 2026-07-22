@@ -2,9 +2,6 @@
 
 namespace App\Services\Ticket;
 
-use App\Models\Customer;
-use App\Models\Ticket;
-use App\Models\TicketToken;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -13,36 +10,26 @@ class CreateTicketService
     public function execute(array $data, string $tenantId)
     {
         return DB::transaction(function () use ($data, $tenantId) {
-            $customer = Customer::firstOrCreate(
+            $visitor = \App\Models\Visitor::firstOrCreate(
                 ['tenant_id' => $tenantId, 'email' => $data['email']],
-                ['name' => $data['name'], 'phone' => $data['phone'] ?? null]
+                ['name' => $data['name'], 'phone' => $data['phone'] ?? null, 'session_id' => Str::uuid()->toString(), 'ip_address' => request()->ip()]
             );
 
-            $ticket = Ticket::create([
+            $chat = \App\Models\Chat::create([
                 'tenant_id' => $tenantId,
-                'customer_id' => $customer->id,
-                'subject' => $data['subject'],
-                'description' => $data['description'],
-                'priority' => $data['priority'] ?? 'low',
-                'status_id' => 1, // Default to New/Open, handle properly later
+                'visitor_id' => $visitor->id,
+                'status' => 'open',
             ]);
 
-            $ticket->replies()->create([
-                'customer_id' => $customer->id,
-                'body' => $data['description'],
-                'is_internal' => false,
-            ]);
-
-            // Generate Token
-            $token = Str::random(64);
-            TicketToken::create([
-                'ticket_id' => $ticket->id,
-                'token' => $token,
+            $chat->messages()->create([
+                'sender_id' => $visitor->id,
+                'sender_type' => \App\Models\Visitor::class,
+                'body' => "Subject: " . $data['subject'] . "\n\n" . $data['description'],
             ]);
 
             return [
-                'ticket' => $ticket,
-                'token' => $token,
+                'ticket' => $chat,
+                'token' => $chat->id, // Fallback since TicketToken is removed
             ];
         });
     }

@@ -64,8 +64,57 @@ Route::middleware(['auth'])->prefix('users')->name('tenant.users.')->group(funct
     Route::get('/', UserIndex::class)->name('index');
 });
 
+use App\Livewire\Tenant\Visitors\VisitorIndex;
+use App\Livewire\Tenant\Settings\Departments\DepartmentIndex;
+use App\Livewire\Tenant\Settings\Shortcuts\ShortcutIndex;
+use App\Livewire\Tenant\Settings\Personal\ProfileView;
+use App\Livewire\Tenant\Tickets\TicketHistory;
+
+use App\Livewire\Tenant\Settings\Account\AccountIndex;
+use App\Livewire\Tenant\Settings\Company\CompanyIndex;
+use App\Livewire\Tenant\Settings\Banned\BannedIndex;
+use App\Livewire\Tenant\Settings\Notifications\NotificationIndex;
+use App\Livewire\Tenant\Settings\Widget\WidgetIndex;
+
+Route::middleware(['auth'])->prefix('visitors')->name('tenant.visitors.')->group(function () {
+    Route::get('/', VisitorIndex::class)->name('index');
+});
+
+Route::middleware(['auth', 'can:view_settings'])->prefix('settings/departments')->name('tenant.settings.departments.')->group(function () {
+    Route::get('/', DepartmentIndex::class)->name('index');
+});
+
+Route::middleware(['auth', 'can:view_settings'])->prefix('settings/shortcuts')->name('tenant.settings.shortcuts.')->group(function () {
+    Route::get('/', ShortcutIndex::class)->name('index');
+});
+
+Route::middleware(['auth'])->prefix('settings/personal')->name('tenant.settings.personal.')->group(function () {
+    Route::get('/', ProfileView::class)->name('index');
+});
+
+Route::middleware(['auth'])->prefix('settings/account')->name('tenant.settings.account.')->group(function () {
+    Route::get('/', AccountIndex::class)->name('index');
+});
+
+Route::middleware(['auth', 'can:view_settings'])->prefix('settings/company')->name('tenant.settings.company.')->group(function () {
+    Route::get('/', CompanyIndex::class)->name('index');
+});
+
+Route::middleware(['auth', 'can:view_settings'])->prefix('settings/banned')->name('tenant.settings.banned.')->group(function () {
+    Route::get('/', BannedIndex::class)->name('index');
+});
+
+Route::middleware(['auth'])->prefix('settings/notifications')->name('tenant.settings.notifications.')->group(function () {
+    Route::get('/', NotificationIndex::class)->name('index');
+});
+
+Route::middleware(['auth', 'can:view_settings'])->prefix('settings/widget')->name('tenant.settings.widget.')->group(function () {
+    Route::get('/', WidgetIndex::class)->name('index');
+});
+
 Route::middleware(['auth'])->prefix('tickets')->name('tenant.tickets.')->group(function () {
     Route::get('/', TicketList::class)->name('index');
+    Route::get('/history', TicketHistory::class)->name('history');
     Route::get('/{ticket}', TicketDetail::class)->name('show');
 });
 

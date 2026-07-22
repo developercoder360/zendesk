@@ -9,9 +9,15 @@
 --}}
 @props(['open' => false, 'id' => null])
 
+@php
+    $wireModel = \Illuminate\View\ComponentAttributeBag::hasMacro('wire') ? $attributes->wire('model') : null;
+    $hasWire = $wireModel && is_string($wireModel->value()) && $wireModel->value() !== '';
+    if ($hasWire) { $attributes = $attributes->whereDoesntStartWith('wire:model'); }
+@endphp
+
 <div
     data-slot="alert-dialog"
-    x-data="{ open: @js((bool) $open) }"
+    x-data="{ open: @if ($hasWire)@entangle($wireModel)@else @js((bool) $open)@endif }"
     @if ($id)
         @open-alert-dialog-{{ $id }}.window="open = true"
         @close-alert-dialog-{{ $id }}.window="open = false"

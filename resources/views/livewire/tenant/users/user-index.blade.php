@@ -17,12 +17,17 @@
                 <x-ui.input wire:model.live.debounce.300ms="search" placeholder="Search users by name or email..." class="pl-9 w-full max-w-sm" />
             </div>
             
-            <select wire:model.live="roleFilter" class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:w-[180px]">
-                <option value="">All Roles</option>
-                <option value="owner">Owner</option>
-                <option value="manager">Manager</option>
-                <option value="agent">Agent</option>
-            </select>
+            <x-ui.select wire:model.live="roleFilter" class="sm:w-[180px]">
+                <x-ui.select-trigger>
+                    <x-ui.select-value placeholder="All Roles" />
+                </x-ui.select-trigger>
+                <x-ui.select-content>
+                    <x-ui.select-item value="">All Roles</x-ui.select-item>
+                    <x-ui.select-item value="owner">Owner</x-ui.select-item>
+                    <x-ui.select-item value="manager">Manager</x-ui.select-item>
+                    <x-ui.select-item value="agent">Agent</x-ui.select-item>
+                </x-ui.select-content>
+            </x-ui.select>
         </div>
 
         <div class="relative w-full overflow-auto">
@@ -54,9 +59,9 @@
                             <td class="p-4 align-middle text-muted-foreground">{{ $tenantUser->position ?? '—' }}</td>
                             <td class="p-4 align-middle">
                                 @if($tenantUser->is_active)
-                                    <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-500">Active</span>
+                                    <x-ui.badge variant="outline" class="bg-primary/10 text-primary border-primary/20">Active</x-ui.badge>
                                 @else
-                                    <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-rose-500/10 text-rose-500">Inactive</span>
+                                    <x-ui.badge variant="destructive" class="opacity-70">Inactive</x-ui.badge>
                                 @endif
                             </td>
                             <td class="p-4 align-middle text-right">
@@ -124,11 +129,16 @@
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-medium leading-none">Role *</label>
-                        <select wire:model="form.role" class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" required>
-                            <option value="agent">Agent</option>
-                            <option value="manager">Manager</option>
-                            <option value="owner">Owner</option>
-                        </select>
+                        <x-ui.select wire:model="form.role">
+                            <x-ui.select-trigger>
+                                <x-ui.select-value placeholder="Select Role" />
+                            </x-ui.select-trigger>
+                            <x-ui.select-content>
+                                <x-ui.select-item value="agent">Agent</x-ui.select-item>
+                                <x-ui.select-item value="manager">Manager</x-ui.select-item>
+                                <x-ui.select-item value="owner">Owner</x-ui.select-item>
+                            </x-ui.select-content>
+                        </x-ui.select>
                         @error('form.role') <span class="text-xs text-destructive">{{ $message }}</span> @enderror
                     </div>
                 </div>

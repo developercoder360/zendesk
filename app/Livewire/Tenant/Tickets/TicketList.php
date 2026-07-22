@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Tenant\Tickets;
 
-use App\Models\Ticket;
+use App\Models\Chat;
 use App\Models\TicketStatus;
 use App\Models\User;
 use Livewire\Attributes\Layout;
@@ -45,36 +45,36 @@ class TicketList extends Component
 
     public function render()
     {
-        $query = Ticket::with(['customer', 'user', 'agent', 'department', 'status']);
+        $query = Chat::with(['visitor', 'agent', 'department']);
 
         if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('subject', 'like', '%'.$this->search.'%')
-                    ->orWhere('description', 'like', '%'.$this->search.'%');
+            $query->whereHas('visitor', function ($q) {
+                $q->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email', 'like', '%'.$this->search.'%');
             });
         }
 
         if ($this->filterStatus) {
-            $query->where('status_id', $this->filterStatus);
+            $query->where('status', $this->filterStatus);
         }
 
         if ($this->filterAssignee) {
-            $query->where('agent_id', $this->filterAssignee);
+            $query->where('assigned_agent_id', $this->filterAssignee);
         }
 
         if ($this->currentTab === 'my') {
-            $query->where('agent_id', auth()->id());
+            $query->where('assigned_agent_id', auth()->user()->tenantProfile?->id);
         } elseif ($this->currentTab === 'unassigned') {
-            $query->whereNull('agent_id');
+            $query->whereNull('assigned_agent_id');
         }
 
         $tickets = $query->latest()->paginate(10);
-        $statuses = TicketStatus::all();
+        $statuses = ['open', 'resolved', 'closed'];
         $agents = User::all();
 
         return view('livewire.tenant.tickets.ticket-list', [
             'tickets' => $tickets,
-            'statuses' => $statuses,
+            'statuses' => collect($statuses)->map(fn($s) => (object)['id' => $s, 'name' => ucfirst($s)]),
             'agents' => $agents,
         ]);
     }

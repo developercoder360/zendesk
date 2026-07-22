@@ -20,7 +20,14 @@ class TenantUser extends Model
         'phone',
         'avatar',
         'is_active',
-        'joined_at'
+        'joined_at',
+        'notification_preferences',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'joined_at' => 'datetime',
+        'notification_preferences' => 'array',
     ];
 
     public function user(): BelongsTo

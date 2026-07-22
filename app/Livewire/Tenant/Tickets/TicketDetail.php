@@ -3,8 +3,7 @@
 namespace App\Livewire\Tenant\Tickets;
 
 use App\Models\Department;
-use App\Models\Ticket;
-use App\Models\TicketStatus;
+use App\Models\Chat;
 use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -12,17 +11,13 @@ use Livewire\Component;
 #[Layout('layouts.tenant')]
 class TicketDetail extends Component
 {
-    public Ticket $ticket;
+    public Chat $ticket;
 
     public $replyBody = '';
 
-    public $isInternal = false;
+    public $status;
 
-    public $status_id;
-
-    public $priority;
-
-    public $agent_id;
+    public $assigned_agent_id;
 
     public $department_id;
 
@@ -32,35 +27,28 @@ class TicketDetail extends Component
 
     public $departments = [];
 
-    public function mount(Ticket $ticket)
+    public function mount(Chat $ticket)
     {
-        $this->ticket = $ticket->load(['customer', 'user', 'agent', 'department', 'status', 'replies.user', 'replies.customer']);
+        $this->ticket = $ticket->load(['visitor', 'agent.user', 'department', 'messages.sender']);
 
-        $this->status_id = $this->ticket->status_id;
-        $this->priority = $this->ticket->priority;
-        $this->agent_id = $this->ticket->agent_id;
+        $this->status = $this->ticket->status;
+        $this->assigned_agent_id = $this->ticket->assigned_agent_id;
         $this->department_id = $this->ticket->department_id;
 
-        $this->agents = User::all();
-        $this->statuses = TicketStatus::all();
+        $this->agents = \App\Models\TenantUser::with('user')->get();
+        $this->statuses = collect(['open', 'resolved', 'closed'])->map(fn($s) => (object)['id' => $s, 'name' => ucfirst($s)]);
         $this->departments = Department::all();
     }
 
-    public function updatedStatusId()
+    public function updatedStatus()
     {
-        $this->ticket->update(['status_id' => $this->status_id ?: null]);
-        $this->ticket->load('status');
+        $this->ticket->update(['status' => $this->status ?: 'open']);
     }
 
-    public function updatedPriority()
+    public function updatedAssignedAgentId()
     {
-        $this->ticket->update(['priority' => $this->priority]);
-    }
-
-    public function updatedAgentId()
-    {
-        $this->ticket->update(['agent_id' => $this->agent_id ?: null]);
-        $this->ticket->load('agent');
+        $this->ticket->update(['assigned_agent_id' => $this->assigned_agent_id ?: null]);
+        $this->ticket->load('agent.user');
     }
 
     public function updatedDepartmentId()
@@ -75,14 +63,14 @@ class TicketDetail extends Component
             'replyBody' => 'required|string',
         ]);
 
-        $this->ticket->replies()->create([
-            'user_id' => auth()->id(),
+        $this->ticket->messages()->create([
+            'sender_id' => auth()->user()->tenantProfile->id,
+            'sender_type' => \App\Models\TenantUser::class,
             'body' => $this->replyBody,
-            'is_internal' => $this->isInternal,
         ]);
 
-        $this->reset('replyBody', 'isInternal');
-        $this->ticket->load('replies.user');
+        $this->reset('replyBody');
+        $this->ticket->load('messages.sender');
     }
 
     public function render()

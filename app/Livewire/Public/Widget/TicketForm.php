@@ -2,9 +2,6 @@
 
 namespace App\Livewire\Public\Widget;
 
-use App\Models\Customer;
-use App\Models\Ticket;
-use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -30,24 +27,21 @@ class TicketForm extends Component
     {
         $this->validate();
 
-        // Check if customer exists in current tenant
-        $customer = Customer::firstOrCreate(
+        $visitor = \App\Models\Visitor::firstOrCreate(
             ['email' => $this->email],
-            ['name' => $this->name]
+            ['name' => $this->name, 'session_id' => \Illuminate\Support\Str::uuid()->toString(), 'ip_address' => request()->ip()]
         );
 
-        // Get default Open status
-        $status = DB::table('ticket_statuses')->where('name', 'Open')->first();
-        $statusId = $status ? $status->id : 1;
-
-        // Create ticket
-        Ticket::create([
+        $chat = \App\Models\Chat::create([
             'tenant_id' => tenant('id'),
-            'customer_id' => $customer->id,
-            'subject' => $this->subject,
-            'description' => $this->description,
-            'status_id' => $statusId,
-            'priority' => 'normal',
+            'visitor_id' => $visitor->id,
+            'status' => 'open',
+        ]);
+
+        $chat->messages()->create([
+            'sender_id' => $visitor->id,
+            'sender_type' => \App\Models\Visitor::class,
+            'body' => "Subject: " . $this->subject . "\n\n" . $this->description,
         ]);
 
         $this->reset(['name', 'email', 'subject', 'description']);

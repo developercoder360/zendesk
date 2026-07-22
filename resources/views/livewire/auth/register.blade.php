@@ -93,11 +93,15 @@
             </div>
             <div class="space-y-2">
                 <x-ui.label for="paymentMethodId">Select Payment Method (Mock)</x-ui.label>
-                <select wire:model="paymentMethodId" id="paymentMethodId"
-                    class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                    <option value="tok_mock_success">Valid Card (Success)</option>
-                    <option value="tok_fail">Declined Card (Fail)</option>
-                </select>
+                <x-ui.select wire:model="paymentMethodId" id="paymentMethodId">
+                    <x-ui.select-trigger>
+                        <x-ui.select-value placeholder="Select Payment Method" />
+                    </x-ui.select-trigger>
+                    <x-ui.select-content>
+                        <x-ui.select-item value="tok_mock_success">Valid Card (Success)</x-ui.select-item>
+                        <x-ui.select-item value="tok_fail">Declined Card (Fail)</x-ui.select-item>
+                    </x-ui.select-content>
+                </x-ui.select>
             </div>
             <div class="flex items-center justify-between pt-4">
                 <button type="button" wire:click="$set('step', 'form')"

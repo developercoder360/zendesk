@@ -65,6 +65,11 @@
 
             {{-- Main Content --}}
             <main class="flex-1 p-4 lg:p-6">
+                @if (isset($header))
+                    <header class="mb-6">
+                        {{ $header }}
+                    </header>
+                @endif
                 {{ $slot }}
             </main>
         </div>

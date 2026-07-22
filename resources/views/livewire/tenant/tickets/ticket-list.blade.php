@@ -24,19 +24,29 @@
                 </div>
                 
                 <div class="flex space-x-4">
-                    <select wire:model.live="filterStatus" class="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                        <option value="">All Statuses</option>
-                        @foreach($statuses as $status)
-                            <option value="{{ $status->id }}">{{ $status->name }}</option>
-                        @endforeach
-                    </select>
+                    <x-ui.select wire:model.live="filterStatus" class="w-40">
+                        <x-ui.select-trigger>
+                            <x-ui.select-value placeholder="All Statuses" />
+                        </x-ui.select-trigger>
+                        <x-ui.select-content>
+                            <x-ui.select-item value="">All Statuses</x-ui.select-item>
+                            @foreach($statuses as $status)
+                                <x-ui.select-item value="{{ $status->id }}">{{ $status->name }}</x-ui.select-item>
+                            @endforeach
+                        </x-ui.select-content>
+                    </x-ui.select>
 
-                    <select wire:model.live="filterAssignee" class="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                        <option value="">All Assignees</option>
-                        @foreach($agents as $agent)
-                            <option value="{{ $agent->id }}">{{ $agent->name }}</option>
-                        @endforeach
-                    </select>
+                    <x-ui.select wire:model.live="filterAssignee" class="w-40">
+                        <x-ui.select-trigger>
+                            <x-ui.select-value placeholder="All Assignees" />
+                        </x-ui.select-trigger>
+                        <x-ui.select-content>
+                            <x-ui.select-item value="">All Assignees</x-ui.select-item>
+                            @foreach($agents as $agent)
+                                <x-ui.select-item value="{{ $agent->id }}">{{ $agent->name }}</x-ui.select-item>
+                            @endforeach
+                        </x-ui.select-content>
+                    </x-ui.select>
                 </div>
             </div>
 
@@ -58,18 +68,18 @@
                             @forelse ($tickets as $ticket)
                                 <x-ui.table-row class="cursor-pointer hover:bg-muted/50 transition-colors" wire:click="navigateToTicket({{ $ticket->id }})" onclick="window.location.href='{{ route('tenant.tickets.show', $ticket) }}'">
                                     <x-ui.table-cell class="font-medium">#{{ $ticket->id }}</x-ui.table-cell>
-                                    <x-ui.table-cell>{{ $ticket->subject }}</x-ui.table-cell>
+                                    <x-ui.table-cell>Chat with {{ $ticket->visitor?->name ?? 'Unknown' }}</x-ui.table-cell>
                                     <x-ui.table-cell>
-                                        {{ $ticket->customer->name ?? $ticket->user->name ?? "Unknown" }}
+                                        {{ $ticket->visitor?->name ?? "Unknown" }}
                                     </x-ui.table-cell>
                                     <x-ui.table-cell>
-                                        {{ $ticket->agent->name ?? "Unassigned" }}
+                                        {{ $ticket->agent?->user?->name ?? "Unassigned" }}
                                     </x-ui.table-cell>
                                     <x-ui.table-cell>
-                                        <x-ui.badge variant="outline">{{ $ticket->status->name ?? "Open" }}</x-ui.badge>
+                                        <x-ui.badge variant="outline">{{ ucfirst($ticket->status) ?? "Open" }}</x-ui.badge>
                                     </x-ui.table-cell>
                                     <x-ui.table-cell>
-                                        <span class="capitalize">{{ $ticket->priority }}</span>
+                                        <span class="capitalize">Normal</span>
                                     </x-ui.table-cell>
                                     <x-ui.table-cell class="text-right">{{ $ticket->created_at->diffForHumans() }}</x-ui.table-cell>
                                 </x-ui.table-row>
