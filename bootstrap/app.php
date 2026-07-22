@@ -68,6 +68,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->priority([
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
+            \App\Http\Middleware\TenantLivewire::class,
             InitializeTenancyByDomain::class,
             InitializeTenancyBySubdomain::class,
             InitializeTenancyByDomainOrSubdomain::class,

@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -41,6 +42,14 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
         config(['livewire.inject_assets' => false]);
         
+        \Livewire\Livewire::setUpdateRoute(function ($handle) {
+            return Route::post('/livewire/update', $handle)
+                ->middleware([
+                    'web',
+                    \App\Http\Middleware\TenantLivewire::class,
+                ]);
+        });
+
         Vite::useScriptTagAttributes(['data-navigate-track' => 'reload']);
         Vite::useStyleTagAttributes(['data-navigate-track' => 'reload']);
         Vite::usePreloadTagAttributes(['data-navigate-track' => 'reload']);
