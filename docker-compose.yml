@@ -42,7 +42,7 @@ services:
         user: laravel
     container_name: laravel_queue
     restart: unless-stopped
-    command: ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+    command: ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
     volumes:
       - ./:/var/www/html
       - ./docker/php/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
@@ -60,7 +60,7 @@ services:
         user: laravel
     container_name: laravel_scheduler
     restart: unless-stopped
-    command: ["cron", "-f"]
+    command: ["php", "/var/www/html/artisan", "schedule:work"]
     volumes:
       - ./:/var/www/html
     depends_on:
