@@ -11,6 +11,8 @@ pnpm-debug.log
 .env
 .env.*
 !.env.example
+rag-service/.cache/
+__pycache__/
 
 # Laravel Build & Public
 /public/build

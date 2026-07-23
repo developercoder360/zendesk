@@ -26,6 +26,6 @@ class Message extends Model
 
     public function getIsAiSenderAttribute(): bool
     {
-        return $this->sender_type === 'ai';
+        return $this->sender_type === 'ai' || ($this->sender_type === TenantUser::class && ($this->sender?->is_ai ?? false));
     }
 }

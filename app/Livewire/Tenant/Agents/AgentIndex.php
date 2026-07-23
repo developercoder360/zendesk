@@ -120,7 +120,10 @@ class AgentIndex extends Component
 
     public function render()
     {
-        $query = \App\Models\TenantUser::with(['user.roles', 'department'])
+        $query = \App\Models\TenantUser::where(function ($q) {
+                $q->where('is_ai', false)->orWhereNull('is_ai');
+            })
+            ->with(['user.roles', 'department'])
             ->withCount(['assignedChats' => function ($q) {
                 $q->where('status', 'open');
             }]);

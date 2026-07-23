@@ -46,10 +46,13 @@ class ProcessAiChatResponse implements ShouldQueue
 
         $tenantId = $chat->tenant_id;
 
-        // 3. Trigger Condition (Default OR logic: No online agents OR unanswered)
+        // 3. Trigger Condition (Default OR logic: No online human agents OR unanswered)
         $onlineAgentsCount = TenantUser::where('tenant_id', $tenantId)
             ->where('status', 'online')
             ->where('is_active', true)
+            ->where(function ($q) {
+                $q->where('is_ai', false)->orWhereNull('is_ai');
+            })
             ->count();
 
         // Check if unanswered timeout (or immediate if no online agents)
@@ -59,7 +62,7 @@ class ProcessAiChatResponse implements ShouldQueue
             ->first();
 
         $unansweredMinutes = $lastVisitorMsg ? $lastVisitorMsg->created_at->diffInMinutes(now()) : 0;
-        $shouldTrigger = ($onlineAgentsCount === 0) || ($unansweredMinutes >= 2) || true; // Immediate trigger for unassigned new visitor chat
+        $shouldTrigger = ($onlineAgentsCount === 0) || ($unansweredMinutes >= 2) || ($chat->assigned_agent_id === null);
 
         if (!$shouldTrigger) {
             return;
@@ -90,7 +93,7 @@ class ProcessAiChatResponse implements ShouldQueue
         $similarityThreshold = (float) env('AI_RAG_SIMILARITY_THRESHOLD', 0.7);
 
         try {
-            $response = Http::timeout(10)->post("{$ragUrl}/api/v1/chat", [
+            $response = Http::timeout(15)->post("{$ragUrl}/api/v1/chat", [
                 'tenant_id'            => $tenantId,
                 'message'              => $this->visitorMessageText,
                 'similarity_threshold' => $similarityThreshold,
@@ -102,13 +105,16 @@ class ProcessAiChatResponse implements ShouldQueue
                 $replyText       = $data['reply'] ?? "I'm connecting you with a human support agent who can best assist you.";
                 $needsEscalation = (bool) ($data['needs_escalation'] ?? false);
 
-                // Create AI Assistant Message using built-in 'ai' sender_type
+                // Fetch or create real AI Assistant TenantUser backing record
+                $aiUser = TenantUser::getAiAssistantUser($tenantId);
+
+                // Create AI Assistant Message referencing real backing TenantUser profile
                 Message::create([
                     'tenant_id'   => $tenantId,
                     'chat_id'     => $chat->id,
                     'body'        => $replyText,
-                    'sender_type' => 'ai',
-                    'sender_id'   => 0,
+                    'sender_type' => 'App\Models\TenantUser',
+                    'sender_id'   => $aiUser->id,
                 ]);
 
                 if ($needsEscalation) {

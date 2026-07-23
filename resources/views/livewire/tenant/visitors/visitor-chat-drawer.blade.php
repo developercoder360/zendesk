@@ -102,16 +102,17 @@
 
                             @forelse($messages as $msg)
                                 @php
+                                    $isAiMsg = $msg->getIsAiSenderAttribute();
+                                    $isAgentMsg = $msg->sender_type === 'App\Models\TenantUser' && !$isAiMsg;
+
                                     $senderName = 'System';
-                                    if ($msg->sender_type === 'App\Models\TenantUser') {
-                                        $senderName = $msg->sender?->user?->name ?? 'Agent';
+                                    if ($isAiMsg) {
+                                        $senderName = 'AI Assistant 🤖';
+                                    } elseif ($msg->sender_type === 'App\Models\TenantUser') {
+                                        $senderName = $msg->sender?->name ?? ($msg->sender?->user?->name ?? 'Agent');
                                     } elseif ($msg->sender_type === 'App\Models\Visitor') {
                                         $senderName = $msg->sender?->name ?: ('Visitor ' . $msg->sender_id);
-                                    } elseif ($msg->getIsAiSenderAttribute()) {
-                                        $senderName = 'AI Assistant 🤖';
                                     }
-                                    $isAgentMsg = $msg->sender_type === 'App\Models\TenantUser';
-                                    $isAiMsg = $msg->getIsAiSenderAttribute();
                                 @endphp
 
                                 <div class="space-y-1">

@@ -20,15 +20,39 @@ class TenantUser extends Model
         'phone',
         'avatar',
         'is_active',
+        'is_ai',
         'joined_at',
         'notification_preferences',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_ai' => 'boolean',
         'joined_at' => 'datetime',
         'notification_preferences' => 'array',
     ];
+
+    public function getNameAttribute(): string
+    {
+        if ($this->is_ai) {
+            return 'AI Assistant';
+        }
+        return $this->user?->name ?? 'Agent';
+    }
+
+    public static function getAiAssistantUser(?string $tenantId = null): self
+    {
+        $tid = $tenantId ?? tenant('id');
+        return self::firstOrCreate(
+            ['tenant_id' => $tid, 'is_ai' => true],
+            [
+                'user_id' => null,
+                'status' => 'online',
+                'is_active' => true,
+                'position' => 'AI Support Assistant',
+            ]
+        );
+    }
 
     public function user(): BelongsTo
     {

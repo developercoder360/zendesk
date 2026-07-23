@@ -130,16 +130,30 @@ services:
     build:
       context: ./rag-service
       dockerfile: Dockerfile
+      target: development
     container_name: laravel_rag
     restart: unless-stopped
     ports:
       - "8080:8080"
+    volumes:
+      - ./rag-service:/app
     environment:
       - DB_HOST=pgsql
       - DB_PORT=5432
       - DB_DATABASE=${DB_DATABASE:-zendesk}
       - DB_USERNAME=${DB_USERNAME:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - AI_PROVIDER_PRIMARY=${AI_PROVIDER_PRIMARY:-gemini}
+      - AI_PROVIDER_FALLBACK=${AI_PROVIDER_FALLBACK:-openrouter}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     depends_on:
       pgsql:
         condition: service_healthy
