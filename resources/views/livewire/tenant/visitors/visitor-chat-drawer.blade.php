@@ -93,6 +93,13 @@
                         <!-- Chat Transcript Area -->
                         <div class="flex-1 overflow-y-auto p-4 space-y-3 text-xs">
                             
+                            @if($activeChat?->needs_human_escalation)
+                                <div class="rounded-md bg-amber-500/10 border border-amber-500/20 p-2.5 mb-3 flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                                    <x-lucide-alert-triangle class="size-4 shrink-0" />
+                                    <span><strong>Human Escalation Triggered:</strong> Visitor requested human support or escalation.</span>
+                                </div>
+                            @endif
+
                             @forelse($messages as $msg)
                                 @php
                                     $senderName = 'System';
@@ -101,13 +108,14 @@
                                     } elseif ($msg->sender_type === 'App\Models\Visitor') {
                                         $senderName = $msg->sender?->name ?: ('Visitor ' . $msg->sender_id);
                                     } elseif ($msg->getIsAiSenderAttribute()) {
-                                        $senderName = 'AI Assistant';
+                                        $senderName = 'AI Assistant 🤖';
                                     }
                                     $isAgentMsg = $msg->sender_type === 'App\Models\TenantUser';
+                                    $isAiMsg = $msg->getIsAiSenderAttribute();
                                 @endphp
 
                                 <div class="space-y-1">
-                                    <div class="flex items-center justify-between font-semibold {{ $isAgentMsg ? 'text-primary' : 'text-foreground' }}">
+                                    <div class="flex items-center justify-between font-semibold {{ $isAgentMsg ? 'text-primary' : ($isAiMsg ? 'text-purple-600 dark:text-purple-400' : 'text-foreground') }}">
                                         <span>{{ $senderName }}</span>
                                         <span class="font-normal text-muted-foreground/70 text-[11px]">
                                             {{ $msg->created_at ? $msg->created_at->format('g:i A') : '' }}
@@ -130,6 +138,13 @@
                                     <p>No messages in this chat session yet.</p>
                                 </div>
                             @endforelse
+
+                            @if($activeChat?->is_typing)
+                                <div class="flex items-center space-x-2 text-purple-600 dark:text-purple-400 py-2 animate-pulse font-medium">
+                                    <x-lucide-bot class="size-4" />
+                                    <span>AI Assistant is typing...</span>
+                                </div>
+                            @endif
 
                         </div>
 

@@ -11,7 +11,12 @@ class Chat extends Model
     use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'visitor_id', 'assigned_agent_id', 'department_id', 'status', 'handled_by',
+        'tenant_id', 'visitor_id', 'assigned_agent_id', 'department_id', 'status', 'handled_by', 'needs_human_escalation', 'is_typing',
+    ];
+
+    protected $casts = [
+        'needs_human_escalation' => 'boolean',
+        'is_typing' => 'boolean',
     ];
 
     public function visitor()

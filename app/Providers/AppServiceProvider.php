@@ -41,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(database_path('migrations/tenant'));
         $this->configureDefaults();
         config(['livewire.inject_assets' => false]);
+        \App\Models\CannedResponse::observe(\App\Observers\CannedResponseObserver::class);
+        \App\Models\Message::observe(\App\Observers\MessageObserver::class);
         
         \Livewire\Livewire::setUpdateRoute(function ($handle) {
             return Route::post('/livewire/update', $handle)
