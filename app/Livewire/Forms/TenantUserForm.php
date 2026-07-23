@@ -24,8 +24,8 @@ class TenantUserForm extends Form
     #[Validate('nullable|string|min:8')]
     public $password = '';
 
-    #[Validate('required|in:agent,manager,owner')]
-    public $role = 'agent';
+    #[Validate('required|in:Agent,Company Admin,Owner,Viewer')]
+    public $role = 'Agent';
 
     #[Validate('nullable|exists:departments,id')]
     public $department_id = null;
@@ -35,6 +35,15 @@ class TenantUserForm extends Form
 
     #[Validate('nullable|string|max:255')]
     public $phone = '';
+
+    #[Validate('nullable|in:online,offline,away')]
+    public $status = 'offline';
+
+    #[Validate('nullable|string|max:255')]
+    public $shift = '';
+
+    #[Validate('nullable|string|max:500')]
+    public $avatar = '';
 
     #[Validate('boolean')]
     public $is_active = true;
@@ -48,12 +57,15 @@ class TenantUserForm extends Form
             
             $this->name = $user->name;
             $this->email = $user->email;
-            $this->role = $user->role;
+            $this->role = $user->roles->first()?->name ?? ucfirst($user->role ?? 'Agent');
             
             if ($this->tenantUser) {
                 $this->department_id = $this->tenantUser->department_id;
                 $this->position = $this->tenantUser->position;
                 $this->phone = $this->tenantUser->phone;
+                $this->status = $this->tenantUser->status ?? 'offline';
+                $this->shift = $this->tenantUser->shift ?? '';
+                $this->avatar = $this->tenantUser->avatar ?? '';
                 $this->is_active = $this->tenantUser->is_active;
             }
         }
@@ -70,9 +82,11 @@ class TenantUserForm extends Form
                 'name'      => $this->name,
                 'email'     => $this->email,
                 'password'  => Hash::make($this->password),
-                'role'      => $this->role,
+                'role'      => strtolower($this->role),
                 'tenant_id' => $tenantId,
             ]);
+
+            $user->assignRole($this->role);
 
             TenantUser::create([
                 'user_id'       => $user->id,
@@ -80,8 +94,11 @@ class TenantUserForm extends Form
                 'department_id' => $this->department_id,
                 'position'      => $this->position,
                 'phone'         => $this->phone,
+                'status'        => $this->status ?: 'offline',
+                'shift'         => $this->shift,
+                'avatar'        => $this->avatar,
                 'is_active'     => $this->is_active,
-                'status'        => 'offline',
+                'joined_at'     => now(),
             ]);
         });
 
@@ -93,10 +110,13 @@ class TenantUserForm extends Form
         $this->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $this->user->id,
-            'role' => 'required|in:agent,manager,owner',
+            'role' => 'required|in:Agent,Company Admin,Owner,Viewer',
             'department_id' => 'nullable|exists:departments,id',
             'position' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:255',
+            'status' => 'nullable|in:online,offline,away',
+            'shift' => 'nullable|string|max:255',
+            'avatar' => 'nullable|string|max:500',
             'is_active' => 'boolean',
         ]);
 
@@ -104,8 +124,10 @@ class TenantUserForm extends Form
             $this->user->update([
                 'name'  => $this->name,
                 'email' => $this->email,
-                'role'  => $this->role,
+                'role'  => strtolower($this->role),
             ]);
+
+            $this->user->syncRoles([$this->role]);
 
             if ($this->password) {
                 $this->user->update(['password' => Hash::make($this->password)]);
@@ -116,6 +138,9 @@ class TenantUserForm extends Form
                     'department_id' => $this->department_id,
                     'position'      => $this->position,
                     'phone'         => $this->phone,
+                    'status'        => $this->status ?: 'offline',
+                    'shift'         => $this->shift,
+                    'avatar'        => $this->avatar,
                     'is_active'     => $this->is_active,
                 ]);
             }

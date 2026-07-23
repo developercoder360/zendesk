@@ -1,9 +1,16 @@
 <div>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-foreground leading-tight">
-            Account Settings
-        </h2>
-    </x-slot>
+    <nav class="flex items-center text-sm text-muted-foreground mb-4">
+        <span class="hover:text-foreground transition-colors cursor-pointer">Settings</span>
+        <span class="inline-flex items-center mx-1.5"><x-lucide-chevron-right class="size-3.5" /></span>
+        <span class="font-medium text-foreground">Account</span>
+    </nav>
+
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight">Account Settings</h1>
+            <p class="text-sm text-muted-foreground">Manage your personal agent account details.</p>
+        </div>
+    </div>
 
     <div class="py-12">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">

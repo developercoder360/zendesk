@@ -99,7 +99,7 @@ class Register extends Component
         $fullDomain = $this->companySlug . '.' . $centralDomain;
         
         $this->validate([
-            'ownerName' => ['required', 'string', 'max:255'],
+            'ownerName' => ['required', 'string', 'max:255', new \App\Rules\NotReservedName],
             'companyName' => ['required', 'string', 'max:255'],
             'companySlug' => ['required', 'string', 'max:255', 'alpha_dash'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],

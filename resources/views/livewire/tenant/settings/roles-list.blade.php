@@ -1,7 +1,7 @@
 <div class="space-y-6 max-w-6xl mx-auto">
     <nav class="flex items-center text-sm text-muted-foreground mb-4">
         <span class="hover:text-foreground transition-colors cursor-pointer">Settings</span>
-        <x-lucide-chevron-right class="mx-2 size-4" />
+        <span class="inline-flex items-center mx-1.5"><x-lucide-chevron-right class="size-3.5" /></span>
         <span class="font-medium text-foreground">Roles & Permissions</span>
     </nav>
 

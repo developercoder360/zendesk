@@ -30,7 +30,7 @@ class UpdateProfileInformationForm extends Component
         $user = Auth::user();
 
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', new \App\Rules\NotReservedName],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->where(fn ($query) => $query->where('tenant_id', tenant('id')))->ignore($user->id)],
         ]);
 

@@ -29,12 +29,14 @@ class ShortcutIndex extends Component
     public string $title = '';
     public string $shortcut = '';
     public string $content = '';
+    public string $tagsString = '';
     public bool $isShared = false;
 
     protected $rules = [
-        'title'    => 'required|string|max:255',
-        'shortcut' => 'required|string|max:50',
-        'content'  => 'required|string',
+        'title'      => 'required|string|max:255',
+        'shortcut'   => 'required|string|max:50',
+        'content'    => 'required|string',
+        'tagsString' => 'nullable|string',
     ];
 
     public function updatingSearch()
@@ -69,6 +71,7 @@ class ShortcutIndex extends Component
         $this->title      = '';
         $this->shortcut   = '';
         $this->content    = '';
+        $this->tagsString = '';
         $this->isShared   = false;
         $this->isModalOpen = true;
     }
@@ -81,6 +84,7 @@ class ShortcutIndex extends Component
         $this->title       = $row->title;
         $this->shortcut    = $row->shortcut_key;
         $this->content     = $row->body;
+        $this->tagsString  = implode(', ', $row->tags ?? []);
         $this->isShared    = is_null($row->tenant_user_id);
         $this->isModalOpen = true;
     }
@@ -93,11 +97,14 @@ class ShortcutIndex extends Component
             ? null
             : auth()->user()->tenantProfile?->id;
 
+        $tags = array_values(array_filter(array_map('trim', explode(',', $this->tagsString))));
+
         $data = [
             'title'          => $this->title,
             'shortcut_key'   => $this->shortcut,
             'body'           => $this->content,
             'tenant_user_id' => $tenantUserId,
+            'tags'           => $tags,
         ];
 
         if ($this->shortcutId) {

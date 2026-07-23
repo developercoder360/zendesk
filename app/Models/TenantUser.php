@@ -39,4 +39,14 @@ class TenantUser extends Model
     {
         return $this->belongsTo(Tenant::class);
     }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function assignedChats(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Chat::class, 'assigned_agent_id');
+    }
 }

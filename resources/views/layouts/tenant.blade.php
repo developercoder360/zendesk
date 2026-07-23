@@ -74,5 +74,8 @@
             </main>
         </div>
     </div>
+
+    {{-- Floating Visitor Chat Drawer UI --}}
+    <livewire:tenant.visitors.visitor-chat-drawer />
 </body>
 </html>

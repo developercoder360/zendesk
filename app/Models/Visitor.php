@@ -26,6 +26,8 @@ class Visitor extends Model
         'device_type',
         'browser',
         'status',
+        'notes',
+        'tags',
         'first_seen_at',
         'last_seen_at',
         'is_banned',

@@ -33,11 +33,6 @@
             </a>
 
             <a href="#" wire:navigate class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
-                <x-lucide-users class="size-4" />
-                Customers
-            </a>
-
-            <a href="#" wire:navigate class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
                 <x-lucide-book class="size-4" />
                 Knowledge Base
             </a>
@@ -49,8 +44,8 @@
 
             <div class="mb-2 mt-6 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Administration</div>
 
-            <div x-data="{ open: {{ request()->routeIs('tenant.settings.*') || request()->routeIs('tenant.users.*') ? 'true' : 'false' }} }">
-                <button @click="open = !open" @class(['flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm transition-all', 'bg-accent text-accent-foreground' => request()->routeIs('tenant.settings.*') || request()->routeIs('tenant.users.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !(request()->routeIs('tenant.settings.*') || request()->routeIs('tenant.users.*'))])>
+            <div x-data="{ open: {{ request()->routeIs('tenant.settings.*') || request()->routeIs('tenant.agents.*') ? 'true' : 'false' }} }">
+                <button @click="open = !open" @class(['flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm transition-all', 'bg-accent text-accent-foreground' => request()->routeIs('tenant.settings.*') || request()->routeIs('tenant.agents.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !(request()->routeIs('tenant.settings.*') || request()->routeIs('tenant.agents.*'))])>
                     <div class="flex items-center gap-3">
                         <x-lucide-settings class="size-4" />
                         Settings
@@ -65,7 +60,7 @@
                     <a href="{{ route('tenant.settings.company.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.company.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.company.*')])>Company</a>
                     @endcan
 
-                    <a href="{{ route('tenant.users.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.users.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.users.*')])>Agents</a>
+                    <a href="{{ route('tenant.agents.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.agents.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.agents.*')])>Agents</a>
                     
                     @can('view_settings')
                     <a href="{{ route('tenant.settings.departments.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.departments.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.departments.*')])>Departments</a>

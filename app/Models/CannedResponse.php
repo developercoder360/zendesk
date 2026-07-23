@@ -11,7 +11,11 @@ class CannedResponse extends Model
     use BelongsToTenant, HasFactory;
 
     protected $fillable = [
-        'tenant_id', 'tenant_user_id', 'shortcut_key', 'title', 'body',
+        'tenant_id', 'tenant_user_id', 'shortcut_key', 'title', 'body', 'tags',
+    ];
+
+    protected $casts = [
+        'tags' => 'array',
     ];
 
     public function tenantUser()

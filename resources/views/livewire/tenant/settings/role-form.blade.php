@@ -1,9 +1,9 @@
 <div class="max-w-4xl mx-auto space-y-6">
     <nav class="flex items-center text-sm text-muted-foreground mb-4">
         <span class="hover:text-foreground transition-colors cursor-pointer">Settings</span>
-        <x-lucide-chevron-right class="mx-2 size-4" />
+        <span class="inline-flex items-center mx-1.5"><x-lucide-chevron-right class="size-3.5" /></span>
         <a wire:navigate href="{{ route('tenant.settings.roles.index') }}" class="hover:text-foreground transition-colors">Roles</a>
-        <x-lucide-chevron-right class="mx-2 size-4" />
+        <span class="inline-flex items-center mx-1.5"><x-lucide-chevron-right class="size-3.5" /></span>
         <span class="font-medium text-foreground">{{ $role ? 'Edit Role' : 'Create Role' }}</span>
     </nav>
 

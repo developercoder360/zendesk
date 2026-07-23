@@ -1,18 +1,23 @@
 <div>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-foreground leading-tight">
-                Banned Visitors & IPs
-            </h2>
-            <div class="flex items-center space-x-4">
-                <div class="relative">
-                    <x-lucide-search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <x-ui.input type="search" placeholder="Search IP or reason..." class="pl-8 w-64" wire:model.live.debounce.300ms="search" />
-                </div>
-                <x-ui.button wire:click="openAddBanModal">Ban New IP</x-ui.button>
-            </div>
+    <nav class="flex items-center text-sm text-muted-foreground mb-4">
+        <span class="hover:text-foreground transition-colors cursor-pointer">Settings</span>
+        <span class="inline-flex items-center mx-1.5"><x-lucide-chevron-right class="size-3.5" /></span>
+        <span class="font-medium text-foreground">Banned Visitors</span>
+    </nav>
+
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight">Banned Visitors & IPs</h1>
+            <p class="text-sm text-muted-foreground">Manage blocked IP addresses and visitors.</p>
         </div>
-    </x-slot>
+        <div class="flex items-center space-x-4">
+            <div class="relative">
+                <x-lucide-search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <x-ui.input type="search" placeholder="Search IP or reason..." class="pl-8 w-64" wire:model.live.debounce.300ms="search" />
+            </div>
+            <x-ui.button wire:click="openAddBanModal">Ban New IP</x-ui.button>
+        </div>
+    </div>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
