@@ -109,8 +109,8 @@ class TicketForm extends Component
                 }
             }
         } else {
-            // Direct navigation preview fallback when valid key is supplied
-            $matched = true;
+            // Public embed requires a valid Referer/Origin header matching allowed_domains
+            $matched = false;
         }
 
         if (!$matched) {

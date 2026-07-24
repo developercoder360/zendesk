@@ -6,7 +6,6 @@ use App\Livewire\Public\Ticket\ViewTicket;
 use App\Livewire\Public\Widget\TicketForm;
 use App\Livewire\Tenant\Dashboard;
 use App\Livewire\Tenant\Profile;
-use App\Livewire\Tenant\Settings\Account\AccountIndex;
 use App\Livewire\Tenant\Settings\Banned\BannedIndex;
 use App\Livewire\Tenant\Settings\Company\CompanyIndex;
 use App\Livewire\Tenant\Settings\Departments\DepartmentIndex;
@@ -61,6 +60,12 @@ Route::middleware('auth')->group(function () {
     Route::prefix('visitors')->name('tenant.visitors.')->group(function () {
         Route::get('/', VisitorIndex::class)->name('index');
     });
+    Route::prefix('customers')->name('tenant.customers.')->group(function () {
+        Route::get('/', \App\Livewire\Tenant\Customers\CustomerIndex::class)->name('index');
+    });
+    Route::prefix('knowledge-base')->name('tenant.knowledge-base.')->group(function () {
+        Route::get('/', \App\Livewire\Tenant\KnowledgeBase\KnowledgeBaseIndex::class)->name('index');
+    });
     Route::prefix('tickets')->name('tenant.tickets.')->group(function () {
         Route::get('/', TicketList::class)->name('index');
         Route::get('/history', TicketHistory::class)->name('history');
@@ -69,9 +74,6 @@ Route::middleware('auth')->group(function () {
     // Settings pages that any authenticated agent can reach.
     Route::prefix('settings/personal')->name('tenant.settings.personal.')->group(function () {
         Route::get('/', ProfileView::class)->name('index');
-    });
-    Route::prefix('settings/account')->name('tenant.settings.account.')->group(function () {
-        Route::get('/', AccountIndex::class)->name('index');
     });
     Route::prefix('settings/notifications')->name('tenant.settings.notifications.')->group(function () {
         Route::get('/', NotificationIndex::class)->name('index');
@@ -98,6 +100,9 @@ Route::middleware('auth')->group(function () {
         Route::prefix('settings/banned')->name('tenant.settings.banned.')->group(function () {
             Route::get('/', BannedIndex::class)->name('index');
         });
+        Route::prefix('settings/teams')->name('tenant.settings.teams.')->group(function () {
+            Route::get('/', \App\Livewire\Tenant\Settings\Teams\TeamIndex::class)->name('index');
+        });
         Route::prefix('settings/widget')->name('tenant.settings.widget.')->group(function () {
             Route::get('/', WidgetIndex::class)->name('index');
         });
@@ -105,7 +110,7 @@ Route::middleware('auth')->group(function () {
 });
 // Public, tokenized ticket view — no auth, reached via a shared link.
 Route::get('/t/{token}', ViewTicket::class)->name('tenant.tickets.public');
-// Embeddable widget iframe — must bypass FrameGuard to load inside a customer's site.
 Route::get('/widget/frame', TicketForm::class)
     ->withoutMiddleware([FrameGuard::class])
+    ->middleware(\App\Http\Middleware\WidgetCspHeader::class)
     ->name('tenant.widget.frame');

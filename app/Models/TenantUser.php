@@ -73,4 +73,10 @@ class TenantUser extends Model
     {
         return $this->hasMany(Chat::class, 'assigned_agent_id');
     }
+
+    public function teams(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, 'team_user', 'tenant_user_id', 'team_id')
+            ->withTimestamps();
+    }
 }

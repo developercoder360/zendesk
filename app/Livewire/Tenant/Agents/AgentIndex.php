@@ -120,7 +120,11 @@ class AgentIndex extends Component
 
     public function render()
     {
-        $query = \App\Models\TenantUser::where(function ($q) {
+        $query = \App\Models\TenantUser::where('tenant_id', tenant('id'))
+            ->whereHas('user', function ($q) {
+                $q->where('tenant_id', tenant('id'));
+            })
+            ->where(function ($q) {
                 $q->where('is_ai', false)->orWhereNull('is_ai');
             })
             ->with(['user.roles', 'department'])

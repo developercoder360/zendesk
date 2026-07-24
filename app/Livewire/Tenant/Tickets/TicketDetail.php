@@ -35,7 +35,15 @@ class TicketDetail extends Component
         $this->assigned_agent_id = $this->ticket->assigned_agent_id;
         $this->department_id = $this->ticket->department_id;
 
-        $this->agents = \App\Models\TenantUser::with('user')->get();
+        $this->agents = \App\Models\TenantUser::where('tenant_id', tenant('id'))
+            ->whereHas('user', function ($q) {
+                $q->where('tenant_id', tenant('id'));
+            })
+            ->where(function ($q) {
+                $q->where('is_ai', false)->orWhereNull('is_ai');
+            })
+            ->with('user')
+            ->get();
         $this->statuses = collect(['open', 'resolved', 'closed'])->map(fn($s) => (object)['id' => $s, 'name' => ucfirst($s)]);
         $this->departments = Department::all();
     }

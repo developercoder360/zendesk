@@ -171,7 +171,15 @@ class ShortcutIndex extends Component
         $shortcuts = $query->paginate(15);
 
         // Agents for filter dropdown
-        $agents = TenantUser::with('user')->get();
+        $agents = TenantUser::where('tenant_id', tenant('id'))
+            ->whereHas('user', function ($q) {
+                $q->where('tenant_id', tenant('id'));
+            })
+            ->where(function ($q) {
+                $q->where('is_ai', false)->orWhereNull('is_ai');
+            })
+            ->with('user')
+            ->get();
 
         return view('livewire.tenant.settings.shortcuts.shortcut-index', [
             'shortcuts' => $shortcuts,

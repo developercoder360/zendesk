@@ -32,7 +32,12 @@
                 Visitors
             </a>
 
-            <a href="#" wire:navigate class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all text-muted-foreground hover:bg-accent hover:text-accent-foreground">
+            <a href="{{ route('tenant.customers.index') }}" wire:navigate @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all', 'bg-accent text-accent-foreground' => request()->routeIs('tenant.customers.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.customers.*')])>
+                <x-lucide-user-check class="size-4" />
+                Customers
+            </a>
+
+            <a href="{{ route('tenant.knowledge-base.index') }}" wire:navigate @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all', 'bg-accent text-accent-foreground' => request()->routeIs('tenant.knowledge-base.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.knowledge-base.*')])>
                 <x-lucide-book class="size-4" />
                 Knowledge Base
             </a>
@@ -54,7 +59,6 @@
                 </button>
                 <div x-show="open" x-collapse class="pl-9 pr-3 py-1 space-y-1">
                     <a href="{{ route('tenant.settings.personal.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.personal.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.personal.*')])>Personal</a>
-                    <a href="{{ route('tenant.settings.account.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.account.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.account.*')])>Account</a>
                     
                     @can('view_settings')
                     <a href="{{ route('tenant.settings.company.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.company.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.company.*')])>Company</a>
@@ -64,6 +68,7 @@
                     
                     @can('view_settings')
                     <a href="{{ route('tenant.settings.departments.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.departments.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.departments.*')])>Departments</a>
+                    <a href="{{ route('tenant.settings.teams.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.teams.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.teams.*')])>Teams</a>
                     <a href="{{ route('tenant.settings.roles.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.roles.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.roles.*')])>Roles & Permissions</a>
                     <a href="{{ route('tenant.settings.shortcuts.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.shortcuts.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.shortcuts.*')])>Shortcuts</a>
                     <a href="{{ route('tenant.settings.banned.index') }}" wire:navigate @class(['block rounded-md px-3 py-1.5 text-sm transition-all', 'bg-accent font-medium text-foreground' => request()->routeIs('tenant.settings.banned.*'), 'text-muted-foreground hover:bg-accent hover:text-accent-foreground' => !request()->routeIs('tenant.settings.banned.*')])>Banned</a>

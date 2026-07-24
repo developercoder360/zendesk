@@ -70,7 +70,15 @@ class TicketList extends Component
 
         $tickets = $query->latest()->paginate(10);
         $statuses = ['open', 'resolved', 'closed'];
-        $agents = User::all();
+        $agents = \App\Models\TenantUser::where('tenant_id', tenant('id'))
+            ->whereHas('user', function ($q) {
+                $q->where('tenant_id', tenant('id'));
+            })
+            ->where(function ($q) {
+                $q->where('is_ai', false)->orWhereNull('is_ai');
+            })
+            ->with('user')
+            ->get();
 
         return view('livewire.tenant.tickets.ticket-list', [
             'tickets' => $tickets,
